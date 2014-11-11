@@ -1,4 +1,4 @@
-from CAS import Evaluator
+from ppp_cas import Evaluator
 from unittest import TestCase
 from sympy import latex
 

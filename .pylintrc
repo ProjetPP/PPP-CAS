@@ -1,2 +1,2 @@
 #!/bin/bash
-pylint --rcfile=.pylintrc CAS
+pylint --rcfile=.pylintrc ppp_cas

@@ -1,4 +1,4 @@
-from CAS import Parser
+from ppp_cas import Parser
 from unittest import TestCase
 
 class TestMathematica(TestCase):

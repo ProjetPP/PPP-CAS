@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='CAS',
+    name='ppp_cas',
     version='0.1',
     description='CAS plugin for PPP',
     url='https://github.com/ProjetPP',
@@ -28,6 +28,6 @@ setup(
         'ppp_core>=0.2',
     ],
     packages=[
-        'CAS',
+        'ppp_cas',
     ],
 )
