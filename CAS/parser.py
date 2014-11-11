@@ -2,79 +2,23 @@
 # http://sympy.org/en/index.html
 
 import sympy.parsing.mathematica
-from re import match
+from re import match, sub
 
 class Parser():
     def __init__(self, expr):
         self.expr=expr
-        print(expr)
-    
-    def fromLatex(self):
-        def parse(s):
-            s = s.strip()
-            s = s.replace("\n", "")
-            s = s.replace("\\left", "")
-            s = s.replace("\\right", "")
-            rules = (
-            # Arithmetic operation between a constant and a function
-            (r"\A(\d+)([*/+-^])(\w+\([^\)]+[^\(]*\))\Z",
-            lambda m: m.group(1) + translateFunction(m.group(2)) + parse(m.group(3))
-            ),
-            # Arithmetic operation between two functions
-            (r"\A(\w+\([^\)]+[^\(]*\))([*/+-^])(\w+\([^\)]+[^\(]*\))\Z",
-            lambda m: parse(m.group(1)) + translateFunction(m.group(2)) + parse(m.group(3))
-            ),
-            # Function call
-            (r"\A(\w+)\(([^\)]+[^\(]*)\)\Z",  
-            lambda m: translateFunction(m.group(1)) + "(" + parse(m.group(2)) + ")"
-            ),
-            # Parenthesized implied multiplication
-            (r"\((.+)\)\((.+)\)",  
-            lambda m: "(" + parse(m.group(1)) + ")*(" + parse(m.group(2)) + ")"
-            ),
-            # Parenthesized expression
-            (r"\A\((.+)\)\Z",
-            lambda m: "(" + parse(m.group(1)) + ")"
-            ),
-            # Parenthesized expression {}
-            (r"\A{(.+)}\Z",
-            lambda m: "(" + parse(m.group(1)) + ")"
-            ),
-            # Implied multiplication - (a)b
-            (r"\A\((.+)\)([\w\.].*)\Z",  
-            lambda m: "(" + parse(m.group(1)) + ")*" + parse(m.group(2))
-            ),
-            # Implied multiplication - 2a
-            (r"\A(-? *[\d\.]+)([a-zA-Z].*)\Z",  
-            lambda m: parse(m.group(1)) + "*" + parse(m.group(2))
-            ),
-            # Infix operator
-            (r"\A([^=]+)([\^\-\*/\+=]=?)(.+)\Z",  
-            lambda m: parse(m.group(1)) + translateOperator(m.group(2)) + parse(m.group(3))
-            ),
-            #\frac{}{}
-            (r"\A\frac{(?P<numerator>.*)}{(?P<denominator>.*)}\Z",
-            lambda m: '(' + parse(m.group('numerator')) + ')/(' + parse(m.group('denominator')) + ')'
-            ),
-            #\sqrt{}
-            (r"\A\sqrt{(?P<radicand>.*)}\Z",
-            lambda m: 'sqrt(' + parse(m.group('radicand')) + ')'
-            ),
-            #\sqrt[]{}
-            (r"\A\sqrt[(?P<index>.*)]{(?P<radicand>.*)}\Z",
-            lambda m: '(' + parse(m.group('radicand')) + ')**(1/(' + parse(m.group('index')) +'))'
-            ))
+        # print(expr)
         
     def fromMathematica(self):
         def parse(s):
             s = s.strip()
             rules = (
             # Arithmetic operation between a constant and a function
-            (r"\A(\d+)([*/+-^])(\w+\[[^\]]+[^\[]*\])\Z",
-            lambda m: m.group(1) + translateFunction(m.group(2)) + parse(m.group(3))),
+            (r"\A(?P<a>\d+)(?P<b>[*/+-^])(?P<c>\w+\[[^\]]+[^\[]*\])\Z",
+            lambda m: m.group('a') + translateFunction(m.group('b')) + parse(m.group('c'))),
 
             # Arithmetic operation between two functions
-            (r"\A(\w+\[[^\]]+[^\[]*\])([*/+-^])(\w+\[[^\]]+[^\[]*\])\Z",
+            (r"\A(\w+\[[^\]]+[^\[]*\])([*/+-^] | \*\*)(\w+\[[^\]]+[^\[]*\])\Z",
             lambda m: parse(m.group(1)) + translateFunction(m.group(2)) + parse(m.group(3))),
                 
             # Function call
@@ -97,9 +41,13 @@ class Parser():
             (r"\A(-? *[\d\.]+)([a-zA-Z].*)\Z",  
             lambda m: parse(m.group(1)) + "*" + parse(m.group(2))),
             
+            # **
+            (r"\A(?P<a>[^=]+)\*\*(?P<b>.+)\Z",  
+            lambda m: parse(m.group('a')) + "**" + parse(m.group('b'))),
+            
             # Infix operator
-            (r"\A([^=]+)([\^\-\*/\+=]=?)(.+)\Z",  
-            lambda m: parse(m.group(1)) + translateOperator(m.group(2)) + parse(m.group(3))))
+            (r"\A(?P<a>[^=]+)(?P<b>[\^\-\*/\+=]=?)(?P<c>.+)\Z",  
+            lambda m: parse(m.group('a')) + translateOperator(m.group('b')) + parse(m.group('c'))))
             # End rules
 
             for rule, action in rules:
@@ -111,7 +59,7 @@ class Parser():
 
         def translateFunction(s):
             if s.startswith("Arc"):
-                return "a" + s[3:]
+                return "a" + s[3:].lower()
             return s.lower()
 
         def translateOperator(s):
@@ -124,6 +72,5 @@ class Parser():
         
     def normalize(self):
         self.fromMathematica()
-        print(self.expr)
         return 'simplify('+self.expr+',2)'
         
