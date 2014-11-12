@@ -7,6 +7,7 @@ from sympy import count_ops, latex
 from sympy.parsing.sympy_parser import parse_expr
 
 from .evaluator import Evaluator
+from .notation import relevance, isMath
 
 class RequestHandler:
     def __init__(self, request):
@@ -17,6 +18,9 @@ class RequestHandler:
 
     def answer(self):
         if not isinstance(self.tree, Sentence):
+            return []
+            
+        if not isMath(self.tree.value):
             return []
         
         evaluator = Evaluator()

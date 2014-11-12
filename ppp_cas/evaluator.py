@@ -19,7 +19,7 @@ from sympy.solvers.diophantine import diophantine
 
 class Evaluator(object):
 
-    def eval(self, s):
+    def evaluate(self, s):
         result = None
         
         parser=Parser(s)

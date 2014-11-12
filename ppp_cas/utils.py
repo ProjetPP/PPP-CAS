@@ -31,7 +31,7 @@ class Eval(object):
         tree = ast.fix_missing_locations(ast.Expression(node))
         return eval(compile(tree, '<string>', 'eval'), self._namespace)
 
-    def eval(self, x, use_none_for_exceptions=False, repr_expression=True):
+    def evaluate(self, x, use_none_for_exceptions=False, repr_expression=True):
         globals = self._namespace
         try:
             x = x.strip()
@@ -50,10 +50,10 @@ class Eval(object):
             try:
                 old_stdout = sys.stdout
                 sys.stdout = StringIO()
-                eval(compile(s, '', 'exec', division.compiler_flag), globals, globals)
+                evaluate(compile(s, '', 'exec', division.compiler_flag), globals, globals)
 
                 if not z is None:
-                    r = eval(z, globals)
+                    r = evaluate(z, globals)
 
                     if repr_expression:
                         r = repr(r)

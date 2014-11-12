@@ -1,6 +1,6 @@
 *~
 __pycache__
 .coverage
-CAS.egg-info/
+ppp_cas.egg-info/
 build/
 dist/
