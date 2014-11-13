@@ -5,7 +5,8 @@ def isMath(formula):
             return True
     return False
 
-def relevance(inputFormula, outputFormula):
-    if (len(str(inputFormula)))!=0:
-        return (len(inputFormula))/(len(str(outputFormula)))
-    return 100
+def relevance(inputFormula, outputTree):
+    lenOutput = len(str(outputTree))
+    if lenOutput!=0:
+        return (len(inputFormula))/lenOutput
+    return 0
