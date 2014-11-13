@@ -2,7 +2,7 @@
 
 from ppp_datamodel import Sentence, Resource
 from ppp_datamodel.communication import TraceItem, Response, Request
-from ppp_core.exceptions import ClientError
+from ppp_libmodule.exceptions import ClientError
 from sympy import count_ops, latex
 from sympy.parsing.sympy_parser import parse_expr
 

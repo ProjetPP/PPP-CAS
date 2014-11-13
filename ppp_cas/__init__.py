@@ -1,6 +1,6 @@
 """CAS plugin for the PPP"""
 
-from ppp_core import HttpRequestHandler
+from ppp_libmodule import HttpRequestHandler
 from .requesthandler import RequestHandler
 
 from .parser import Parser
