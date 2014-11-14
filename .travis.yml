@@ -11,7 +11,7 @@ install:
     - pip install scrutinizer-ocular coverage webtest httmock requests ppp_datamodel ppp_core sympy
 
 before_script:
-  - ./setup.py install
+  - ./setup.py install --user
 
 script:
   - coverage3 run run_tests.py
