@@ -51,7 +51,7 @@ def p_expression_cmp(p):
                     | expression EXCL EQ expression'''
     if p[2] == '>':
         p[0] = Gt(p[1], p[3])
-    elif p[2] == '-':
+    elif p[2] == '<':
         p[0] = Lt(p[1], p[3])
     elif p[2] == '=':
         p[0] = Eq(p[1], p[4])
