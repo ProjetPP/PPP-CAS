@@ -25,14 +25,14 @@ class RequestHandler:
         
         evaluator = Evaluator()
         try:
-            outputFormula=evaluator.eval(self.tree.value)
+            outputFormula=evaluator.evaluate(self.tree.value)
         except Exception:
             return []
         outputTree=Resource(latex(outputFormula))
             
         measures = {
             'accuracy': 1, 
-            'relevance': (len(self.tree.value))/(len(str(outputFormula)))
+            'relevance': relevance(self.tree.value, outputFormula)
         }
         trace = self.trace + [TraceItem('CAS', outputTree, measures)]
         response = Response(self.language, outputTree, measures, trace)

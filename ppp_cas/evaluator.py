@@ -4,12 +4,10 @@ import sys
 import traceback
 import collections
 from .utils import Eval, arguments, custom_implicit_transformation, synonyms
-from sympy import latex, series, sympify, solve, Derivative, \
-    Integral, Symbol, diff, integrate
+from sympy import latex, series, sympify, solve, Derivative, Integral, Symbol, diff, integrate
 import sympy
 from sympy.core.function import FunctionClass
-from sympy.parsing.sympy_parser import stringify_expr, eval_expr, \
-    standard_transformations, convert_xor, TokenError
+from sympy.parsing.sympy_parser import stringify_expr, eval_expr, standard_transformations, convert_xor, TokenError
 from .parser import Parser
 
 PREEXEC = """from sympy import *
@@ -21,7 +19,6 @@ class Evaluator(object):
 
     def evaluate(self, s):
         result = None
-        
         parser=Parser(s)
         inputFormula=parser.normalize()
         

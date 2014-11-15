@@ -1,118 +1,89 @@
-from ppp_cas import Parser
+from ppp_cas.mathematicaYacc import mathematicaParser
+from ppp_cas.mathematicaLex import mathematicaLexer
+from ppp_cas.mathematicaTree import Plus, Minus, Times, Opp, FunctionCall, List, Divide, Diff, Eq, Pow, Id
 from unittest import TestCase
 
 class TestMathematica(TestCase):
 
-    def testFunctionCall(self):
-        parser = Parser('Sin[x]')
-        parser.fromMathematica()
-        self.assertEqual(parser.expr,'sin(x)')
-        
-    def testFunctionName(self):
-        parser = Parser('Arctan[x]')
-        parser.fromMathematica()
-        self.assertEqual(parser.expr,'atan(x)')
-        parser = Parser('ArcTan[x]')
-        parser.fromMathematica()
-        self.assertEqual(parser.expr,'atan(x)')
-        
-    def testExp(self):
-        parser = Parser('x^2')
-        parser.fromMathematica()
-        self.assertEqual(parser.expr,'x**2')
-
-    def testImpliedMultiplication(self):
-        parser = Parser('(a)(b)')
-        parser.fromMathematica()
-        self.assertEqual(parser.expr,'(a)*(b)')
-
-        parser = Parser('(a)b')
-        parser.fromMathematica()
-        self.assertEqual(parser.expr,'(a)*b')
-        
-        parser = Parser('a(b)')
-        parser.fromMathematica()
-        self.assertEqual(parser.expr,'a(b)') # For non-Mathematica function call
-
-    def testInfixOperator(self):
-        parser = Parser('a+b')
-        parser.fromMathematica()
-        self.assertEqual(parser.expr,'a+b')
-
-        parser = Parser('a/b')
-        parser.fromMathematica()
-        self.assertEqual(parser.expr,'a/b')
-        
-        parser = Parser('a-b')
-        parser.fromMathematica()
-        self.assertEqual(parser.expr,'a-b')
-        
-        parser = Parser('a*b')
-        parser.fromMathematica()
-        self.assertEqual(parser.expr,'a*b')
-        
-        parser = Parser('a=b')
-        parser.fromMathematica()
-        self.assertEqual(parser.expr,'a=b')
-        
-        parser = Parser('a+=b')
-        parser.fromMathematica()
-        self.assertEqual(parser.expr,'a+=b')
-
-        parser = Parser('a/=b')
-        parser.fromMathematica()
-        self.assertEqual(parser.expr,'a/=b')
-        
-        parser = Parser('a-=b')
-        parser.fromMathematica()
-        self.assertEqual(parser.expr,'a-=b')
-        
-        parser = Parser('a*=b')
-        parser.fromMathematica()
-        self.assertEqual(parser.expr,'a*=b')
-        
-        parser = Parser('a==b')
-        parser.fromMathematica()
-        self.assertEqual(parser.expr,'a==b')
-        
-    def testParenthesizedExpression(self):
-        parser = Parser('()')
-        parser.fromMathematica()
-        self.assertEqual(parser.expr,'()')
-        parser = Parser('(a)')
-        parser.fromMathematica()
-        self.assertEqual(parser.expr,'(a)')
-        parser = Parser('(a+b)')
-        parser.fromMathematica()
-        self.assertEqual(parser.expr,'(a+b)')
-        parser = Parser('(a^b)')
-        parser.fromMathematica()
-        self.assertEqual(parser.expr,'(a**b)')
-        
-    def testArithCteFun(self):
-        parser = Parser('a+f[x]')
-        parser.fromMathematica()
-        self.assertEqual(parser.expr,'a+f(x)')
-        parser = Parser('a^G[x]')
-        parser.fromMathematica()
-        self.assertEqual(parser.expr,'a**g(x)')
-        parser = Parser('a^G[x]')
-        parser.fromMathematica()
-        self.assertEqual(parser.expr,'a**g(x)')
-        
-    def testArithFunFun(self):
-        parser = Parser('f[x]+f[x]')
-        parser.fromMathematica()
-        self.assertEqual(parser.expr,'f(x)+f(x)')
-        parser = Parser('g[x]^G[x]')
-        parser.fromMathematica()
-        self.assertEqual(parser.expr,'g(x)**g(x)')
-        parser = Parser('H[X]^G[x]')
-        parser.fromMathematica()
-        self.assertEqual(parser.expr,'h(X)**g(x)')
-        
-    def testComplexExpressions(self):
-        parser = Parser('Sin[x]^2+Cos[x]^2')
-        parser.fromMathematica()
-        self.assertEqual(parser.expr,'sin(x)**2+cos(x)**2')
-        
+    def testParser(self):
+        testList=[('''0''', Id(0)),
+                  ('''Sin[x]''', FunctionCall(Id('Sin'),List([Id('x')]))),
+                  ('''Arctan[x]''', FunctionCall(Id('Arctan'),List([Id('x')]))),
+                  ('''Sqrt[4]''', FunctionCall(Id('Sqrt'),List([Id('4')]))),
+                  ('''ArcTan[x]''', FunctionCall(Id('ArcTan'),List([Id('x')]))),
+                  ('''x^2''', Pow(Id('x'), Id('2'))),
+                  ('''a+b''', Plus(Id('a'), Id('b'))),
+                  ('''a*b''', Times(Id('a'), Id('b'))),
+                  ('''a*-b''', Times(Id('a'),Opp(Id('b')))),
+                  ('''-a*b''', Times(Opp(Id('a')),Id('b'))),
+                  ('''a/b''', Divide(Id('a'), Id('b'))),
+                  ('''a-b''', Minus(Id('a'), Id('b'))),
+                  ('''a^b''', Pow(Id('a'), Id('b'))),
+                  ('''(a+b)''', Plus(Id('a'), Id('b'))),
+                  ('''(a*b)''', Times(Id('a'), Id('b'))),
+                  ('''(a/b)''', Divide(Id('a'), Id('b'))),
+                  ('''(a-b)''', Minus(Id('a'), Id('b'))),
+                  ('''(a^b)''', Pow(Id('a'), Id('b'))),
+                  ('''(a)^b''', Pow(Id('a'), Id('b'))),
+                  ('''(a+b)*c''', Times((Plus(Id('a'), Id('b'))), Id('c'))),
+                  ('''a+(b*c)''', Plus(Id('a'), Times(Id('b'), Id('c')))),
+                  ('''a+b*c''', Plus(Id('a'), Times(Id('b'), Id('c')))),
+                  ('''a^b^c''', Pow(Id('a'),Pow(Id('b'), Id('c')))),
+                  ('''a*b/c''', Divide(Times(Id('a'),Id('b')),Id('c'))),
+                  ('''a+b/c''', Plus(Id('a'),Divide(Id('b'),Id('c')))),
+                  ('''a^G[x]''', Pow(Id('a'),FunctionCall(Id('G'),List([Id('x')])))),
+                  ('''f[x]+f[x]''', Plus(FunctionCall(Id('f'),List([Id('x')])),FunctionCall(Id('f'),List([Id('x')])))),
+                  ('''f[x]^G[x]''', Pow(FunctionCall(Id('f'),List([Id('x')])),FunctionCall(Id('G'),List([Id('x')])))),
+                  ('''Sin[x]^2+Cos[x]^2''', Plus(Pow(FunctionCall(Id('Sin'),List([Id('x')])),Id(2)),Pow(FunctionCall(Id('Cos'),List([Id('x')])),Id(2)))),
+                  ('''{}''', List([])),
+                  ('''{a}''', List([Id('a')])),
+                  ('''{0.42,85,f[g]}''', List([Id('0.42'), Id('85'), FunctionCall(Id('f'),List([Id('g')]))])),
+                  ('''Sum[1/i^6, {i, 1, Infinity}]''',FunctionCall(Id('Sum'),List([Divide(Id('1'),Pow(Id('i'),Id('6'))), List([Id('i'), Id('1'), Id('Infinity')])]))),
+                  ('''Sum[j/i^6, {i, 1, Infinity}, {j, 0 ,m}]''',FunctionCall(Id('Sum'),List([Divide(Id('j'),Pow(Id('i'),Id('6'))), List([Id('i'), Id('1'), Id('Infinity')]), List([Id('j'), Id('0'), Id('m')])]))),
+                  ('''Integrate[1/(x^3 + 1), x]''', FunctionCall(Id('Integrate'),List([Divide(Id('1'),Plus(Pow(Id('x'),Id('3')),Id('1'))), Id('x')]))),
+                  ('''Integrate[1/(x^3 + 1), {x, 0, 1}]''', FunctionCall(Id('Integrate'),List([Divide(Id('1'),Plus(Pow(Id('x'),Id('3')),Id('1'))), List([Id('x'), Id('0'), Id('1')])]))),
+                  ('''Integrate[Sin[x*y], {x, 0, 1}, {y, 0, x}]''', FunctionCall(Id('Integrate'),List([FunctionCall(Id('Sin'),List([Times(Id('x'),Id('y'))])), List([Id('x'), Id('0'), Id('1')]), List([Id('y'), Id('0'), Id('x')])]))),
+                  ]
+        for (expr, res) in testList:
+            self.assertEqual(str(mathematicaParser.parse(expr, lexer=mathematicaLexer)), str(res))
+            
+    def testSimpify(self):
+        testList=[(Id(0),'''0'''),
+                  (FunctionCall(Id('Sin'),List([Id('x')])), '''(sin(x))'''),
+                  (FunctionCall(Id('Arctan'),List([Id('x')])), '''(atan(x))'''),
+                  (FunctionCall(Id('Sqrt'),List([Id('4')])), '''(sqrt(4))'''),
+                  (FunctionCall(Id('ArcTan'),List([Id('x')])), '''(ArcTan(x))'''),
+                  (Pow(Id('x'), Id('2')), '''(x**2)'''),
+                  (Plus(Id('a'), Id('b')), '''(a+b)'''),
+                  (Times(Id('a'), Id('b')), '''(a*b)'''),
+                  (Times(Id('a'),Opp(Id('b'))), '''(a*(-b))'''),
+                  (Times(Opp(Id('a')),Id('b')), '''((-a)*b)'''),
+                  (Divide(Id('a'), Id('b')), '''(a/b)'''),
+                  (Minus(Id('a'), Id('b')), '''(a-b)'''),
+                  (Pow(Id('a'), Id('b')), '''(a**b)'''),
+                  (Times((Plus(Id('a'), Id('b'))), Id('c')), '''((a+b)*c)'''),
+                  (Plus(Id('a'), Times(Id('b'), Id('c'))), '''(a+(b*c))'''),
+                  (Pow(Id('a'),Pow(Id('b'), Id('c'))), '''(a**(b**c))'''),
+                  (Divide(Times(Id('a'),Id('b')),Id('c')), '''((a*b)/c)'''),
+                  (Plus(Id('a'),Divide(Id('b'),Id('c'))), '''(a+(b/c))'''),
+                  (Pow(Id('a'),FunctionCall(Id('G'),List([Id('x')]))), '''(a**(G(x)))'''),
+                  (Plus(FunctionCall(Id('f'),List([Id('x')])),FunctionCall(Id('f'),List([Id('x')]))), '''((f(x))+(f(x)))'''),
+                  (Pow(FunctionCall(Id('f'),List([Id('x')])),FunctionCall(Id('G'),List([Id('x')]))), '''((f(x))**(G(x)))'''),
+                  (Plus(Pow(FunctionCall(Id('Sin'),List([Id('x')])),Id(2)),Pow(FunctionCall(Id('Cos'),List([Id('x')])),Id(2))), '''(((sin(x))**2)+((cos(x))**2))'''),
+                  (List([]), ''''''),
+                  (List([Id('a')]), '''a'''),
+                  (List([Id('0.42'), Id('85'), FunctionCall(Id('f'),List([Id('g')]))]), '''0.42, 85, (f(g))'''),
+                  (FunctionCall(Id('Sum'),List([Divide(Id('1'),Pow(Id('i'),Id('6'))), List([Id('i'), Id('1'), Id('Infinity')])])), '''(summation((1/(i**6)),(i,(1,oo))))'''),
+                  (FunctionCall(Id('Sum'),List([Divide(Id('j'),Pow(Id('i'),Id('6'))), List([Id('i'), Id('1'), Id('Infinity')]), List([Id('j'), Id('0'), Id('m')])])), '''(summation((j/(i**6)),(i,(1,oo)),(j,(0,m))))'''),
+                  (FunctionCall(Id('Integrate'),List([Divide(Id('1'),Plus(Pow(Id('x'),Id('3')),Id('1'))), Id('x')])), '''(integrate((1/((x**3)+1)),(x)))'''),
+                  (FunctionCall(Id('Integrate'),List([Divide(Id('1'),Plus(Pow(Id('x'),Id('3')),Id('1'))), List([Id('x'), Id('0'), Id('1')])])),'''(integrate((1/((x**3)+1)),(x, 0, 1)))'''),
+                  (FunctionCall(Id('Integrate'),List([FunctionCall(Id('Sin'),List([Times(Id('x'),Id('y'))])), List([Id('x'), Id('0'), Id('1')]), List([Id('y'), Id('0'), Id('x')])])), '''(integrate((sin((x*y))),(x, 0, 1),(y, 0, x)))'''),
+                  (FunctionCall(Id('N'), List([FunctionCall(Id('Sqrt'), List([Id('42')]))])), '''(N((sqrt(42))))''' ),
+                  (FunctionCall(Id('N'), List([FunctionCall(Id('Sqrt'), List([Id('42')])), Id('20')])), '''(N((sqrt(42)), 20))''' ),
+                  (FunctionCall(Id('D'), List([Id('f'), Id('x')])), '''(diff(f, x))'''),
+                  (FunctionCall(Id('D'), List([Id('f'), Id('x'), Id('y')])), '''(diff(f, x, y))'''),
+                  (FunctionCall(Id('D'), List([Id('f'), List([Id('x'), Id('2')]), List([Id('y'), Id('4')])])), '''(diff(f, x, 2, y, 4))'''),
+                  (FunctionCall(Id('D'), List([Id('f'), List([Id('x'), Id('2')]), List([Id('y'), Id('4')]), Id('z')])), '''(diff(f, x, 2, y, 4, z))'''),
+                  ]
+        for (expr, res) in testList:
+            self.assertEqual(expr.toSympy(), res)

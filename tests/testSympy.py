@@ -1,4 +1,4 @@
-from ppp_cas import Evaluator
+from ppp_cas.evaluator import Evaluator
 from unittest import TestCase
 from sympy import latex
 
@@ -6,31 +6,32 @@ class TestSympy(TestCase):
     
     def testNumeric(self):
         evaluator = Evaluator()
-        outputFormula=latex(evaluator.evaluate('2/4'))
-        self.assertEqual(outputFormula, '\\frac{1}{2}')
-        outputFormula=latex(evaluator.evaluate('4/2'))
-        self.assertEqual(outputFormula, '2')
-        outputFormula=latex(evaluator.evaluate('sqrt(4)'))
-        self.assertEqual(outputFormula, '2')
-        outputFormula=latex(evaluator.evaluate('sqrt((42)**(pi))'))
-        self.assertEqual(outputFormula, '42^{\\frac{\pi}{2}}')
+        testCases = [('2/4', '\\frac{1}{2}'),
+                     ('4/2', '2'),
+                     ('sqrt(4)', '2'),
+                     ('sqrt((42)**(pi))', '42^{\\frac{\pi}{2}}'),
+                    ]
+        for (expr, res) in testCases:
+            evaluated = evaluator.evaluate(expr)
+            self.assertEqual(latex(evaluated), res)
     
     def testSimplify(self):
         evaluator = Evaluator()
-        outputFormula=latex(evaluator.evaluate('sqrt(x)**2'))
-        self.assertEqual(outputFormula, 'x')
-        outputFormula=latex(evaluator.evaluate('sqrt(x)^2'))
-        self.assertEqual(outputFormula, 'x')
-        outputFormula=latex(evaluator.evaluate('x-x'))
-        self.assertEqual(outputFormula, '0')
-        outputFormula=latex(evaluator.evaluate('sin(x)**2+cos(x)**2'))
-        self.assertEqual(outputFormula, '1')
-        outputFormula=latex(evaluator.evaluate('summation(1/n**2, (n,(1,oo)))'))
-        self.assertEqual(outputFormula, '\\frac{\pi^{2}}{6}')
-        outputFormula=latex(evaluator.evaluate('integrate(exp(-x**2/2), (x,(-oo,oo)))'))
-        self.assertEqual(outputFormula, '\\sqrt{2} \\sqrt{\pi}')
+        testCases = [('sqrt(x)**2', 'x'),
+                     ('sqrt(x)^2', 'x'),
+                     ('x-x', '0'),
+                     ('simplify(sin(x)**2+cos(x)**2)', '1'),
+                    ]
+        for (expr, res) in testCases:
+            evaluated = evaluator.evaluate(expr)
+            self.assertEqual(latex(evaluated), res)
 
     def testSymbolic(self):
         evaluator = Evaluator()
-        outputFormula=latex(evaluator.evaluate('diff(x**2,x)'))
-        self.assertEqual(outputFormula, '2 x')
+        testCases = [('diff(x**2,x)', '2 x'),
+                     ('integrate(exp(-x**2/2), (x,(-oo,oo)))', '\\sqrt{2} \\sqrt{\pi}'),
+                     ('summation(1/n**2, (n,(1,oo)))', '\\frac{\pi^{2}}{6}'),
+                    ]
+        for (expr, res) in testCases:
+            evaluated = evaluator.evaluate(expr)
+            self.assertEqual(latex(evaluated), res)
