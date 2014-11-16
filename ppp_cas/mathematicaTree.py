@@ -138,6 +138,7 @@ class FunctionCall:
                             'Integrate' : (lambda a: 'integrate('+a[0].toSympy()+''.join([(lambda l:',('+l.toSympy()+')')(l) for l in a[1:]])+')'),
                             'N' : (lambda a: 'N('+a.toSympy()+')'),
                             'D' : (lambda a: 'diff('+a[0].toSympy()+', '+', '.join([l.toSympy() for l in a[1:]])+')'),
+                            'Exp' : (lambda a: 'exp('+a.toSympy()+')'),
                            }
                             
         if function in mathematicaToSympy.keys():
@@ -156,7 +157,9 @@ class Id:
         
     def translateId(self, id):
         mathematicaToSympy={'Infinity' : 'oo',
-                            'I' : 'I'}
+                            'I' : 'I',
+                            'Pi' : 'pi',
+                           }
         if id in mathematicaToSympy.keys():
             return mathematicaToSympy[id]
         return str(id)

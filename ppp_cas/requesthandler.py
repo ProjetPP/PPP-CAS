@@ -6,7 +6,7 @@ from ppp_libmodule.exceptions import ClientError
 from sympy import count_ops, latex
 from sympy.parsing.sympy_parser import parse_expr
 
-from .evaluator import Evaluator
+from .evaluator import evaluate
 from .notation import relevance, isMath
 
 class RequestHandler:
@@ -23,9 +23,8 @@ class RequestHandler:
         if not isMath(self.tree.value):
             return []
         
-        evaluator = Evaluator()
         try:
-            outputFormula=evaluator.evaluate(self.tree.value)
+            outputFormula=evaluate(self.tree.value)
         except Exception:
             return []
         outputTree=Resource(latex(outputFormula))

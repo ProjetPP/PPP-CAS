@@ -10,6 +10,7 @@ precedence = (
     ('nonassoc', 'EQ', 'EXCL'),
     ('left', 'PLUS', 'MINUS'),
     ('left', 'TIMES', 'DIVIDE'),
+    ('left', 'UMINUS'),
     ('right', 'POW'),
     ('nonassoc', 'RPAREN'),
     ('nonassoc', 'LPAREN'),
@@ -17,7 +18,6 @@ precedence = (
     ('nonassoc', 'LBRACE'),
     ('nonassoc', 'RBRACKET'),
     ('nonassoc', 'LBRACKET'),
-    ('left', 'UMINUS'),
     ('nonassoc', 'COMMA'),
 )
 

@@ -19,6 +19,8 @@ class TestMathematica(TestCase):
                   ('''a/b''', Divide(Id('a'), Id('b'))),
                   ('''a-b''', Minus(Id('a'), Id('b'))),
                   ('''a^b''', Pow(Id('a'), Id('b'))),
+                  ('''a^b/c''', Divide(Pow(Id('a'),Id('b')),Id('c'))),
+                  ('''-a^b/c''', Divide(Opp(Pow(Id('a'),Id('b'))),Id('c'))),
                   ('''(a+b)''', Plus(Id('a'), Id('b'))),
                   ('''(a*b)''', Times(Id('a'), Id('b'))),
                   ('''(a/b)''', Divide(Id('a'), Id('b'))),

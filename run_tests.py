@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
+import os
 import unittest
+
+os.environ['PPP_CAS_CONFIG'] = 'config.json'
 
 def main(): # pragma: no cover
     testsuite = unittest.TestLoader().discover('tests/')
