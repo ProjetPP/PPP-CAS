@@ -1,17 +1,17 @@
 import ply.yacc as yacc
 from .mathematicaLex import tokens
-from .mathematicaTree import Plus, Minus, Times, Opp, FunctionCall, List, Divide, Diff, Eq, Pow, Id
+from .mathematicaTree import Plus, Minus, Times, Opp, FunctionCall, List, Divide, Diff, Eq, Pow, Id, Fact
 from sympy import latex
 
 precedence = (
     ('nonassoc', 'NUMBER'),
     ('nonassoc', 'ID'),
-    ('nonassoc', 'LT', 'GT'),
-    ('nonassoc', 'EQ', 'EXCL'),
     ('left', 'PLUS', 'MINUS'),
     ('left', 'TIMES', 'DIVIDE'),
     ('left', 'UMINUS'),
+    ('left', 'UPLUS'),
     ('right', 'POW'),
+    ('left', 'EXCL'),
     ('nonassoc', 'RPAREN'),
     ('nonassoc', 'LPAREN'),
     ('nonassoc', 'RBRACE'),
@@ -24,8 +24,12 @@ precedence = (
 start = 'expression'
 
 def p_expr_uminus(p):
-    'expression : MINUS expression %prec UMINUS'
-    p[0] = Opp(p[2])
+    '''expression : MINUS expression %prec UMINUS
+                    | PLUS expression %prec UPLUS'''
+    if p[1]=='-':
+        p[0] = Opp(p[2])
+    else:
+        p[0] = p[2]
 
 def p_expression_arith(p):
     '''expression : expression PLUS expression
@@ -43,21 +47,11 @@ def p_expression_arith(p):
         p[0] = Divide(p[1], p[3])
     elif p[2] == '^':
         p[0] = Pow(p[1], p[3])
-
-def p_expression_cmp(p):
-    '''expression : expression GT expression
-                    | expression LT expression
-                    | expression EQ EQ expression
-                    | expression EXCL EQ expression'''
-    if p[2] == '>':
-        p[0] = Gt(p[1], p[3])
-    elif p[2] == '<':
-        p[0] = Lt(p[1], p[3])
-    elif p[2] == '=':
-        p[0] = Eq(p[1], p[4])
-    elif p[2] == '!':
-        p[0] = Neq(p[1], p[4])
         
+def p_expression_fact(p):
+    '''expression : expression EXCL'''
+    p[0] = Fact(p[1])
+
 def p_expression_term(p):
     '''expression : LPAREN expression RPAREN'''
     p[0] = p[2]

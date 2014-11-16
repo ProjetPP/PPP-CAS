@@ -1,6 +1,6 @@
 from ppp_cas.mathematicaYacc import mathematicaParser
 from ppp_cas.mathematicaLex import mathematicaLexer
-from ppp_cas.mathematicaTree import Plus, Minus, Times, Opp, FunctionCall, List, Divide, Diff, Eq, Pow, Id
+from ppp_cas.mathematicaTree import Plus, Minus, Times, Opp, FunctionCall, List, Divide, Diff, Eq, Pow, Id, Fact
 from unittest import TestCase
 
 class TestMathematica(TestCase):
@@ -14,6 +14,16 @@ class TestMathematica(TestCase):
                   ('''x^2''', Pow(Id('x'), Id('2'))),
                   ('''a+b''', Plus(Id('a'), Id('b'))),
                   ('''a*b''', Times(Id('a'), Id('b'))),
+                  ('''a!''', Fact(Id('a'))),
+                  ('''2*a!''', Times(Id(2),Fact(Id('a')))),
+                  ('''a!!''', Fact(Fact(Id('a')))),
+                  ('''-a!''', Opp(Fact(Id('a')))),
+                  ('''b+a!''', Plus(Id('b'), Fact(Id('a')))),
+                  ('''-a-a''', Minus(Opp(Id('a')), Id('a'))),
+                  ('''--a''', Opp(Opp(Id('a')))),
+                  ('''+a''', Id('a')),
+                  ('''+-a''', Opp(Id('a'))),
+                  ('''-+a''', Opp(Id('a'))),
                   ('''a*-b''', Times(Id('a'),Opp(Id('b')))),
                   ('''-a*b''', Times(Opp(Id('a')),Id('b'))),
                   ('''a/b''', Divide(Id('a'), Id('b'))),
@@ -33,6 +43,7 @@ class TestMathematica(TestCase):
                   ('''a^b^c''', Pow(Id('a'),Pow(Id('b'), Id('c')))),
                   ('''a*b/c''', Divide(Times(Id('a'),Id('b')),Id('c'))),
                   ('''a+b/c''', Plus(Id('a'),Divide(Id('b'),Id('c')))),
+                  ('''x^n/n!''', Divide(Pow(Id('x'),Id('n')),Fact(Id('n')))),
                   ('''a^G[x]''', Pow(Id('a'),FunctionCall(Id('G'),List([Id('x')])))),
                   ('''f[x]+f[x]''', Plus(FunctionCall(Id('f'),List([Id('x')])),FunctionCall(Id('f'),List([Id('x')])))),
                   ('''f[x]^G[x]''', Pow(FunctionCall(Id('f'),List([Id('x')])),FunctionCall(Id('G'),List([Id('x')])))),
@@ -86,6 +97,12 @@ class TestMathematica(TestCase):
                   (FunctionCall(Id('D'), List([Id('f'), Id('x'), Id('y')])), '''(diff(f, x, y))'''),
                   (FunctionCall(Id('D'), List([Id('f'), List([Id('x'), Id('2')]), List([Id('y'), Id('4')])])), '''(diff(f, x, 2, y, 4))'''),
                   (FunctionCall(Id('D'), List([Id('f'), List([Id('x'), Id('2')]), List([Id('y'), Id('4')]), Id('z')])), '''(diff(f, x, 2, y, 4, z))'''),
+                  (Fact(Id('a')), '''(a!)'''),
+                  (Times(Id(2),Fact(Id('a'))), '''(2*(a!))'''),
+                  (Fact(Fact(Id('a'))), '''((a!)!)'''),
+                  (Opp(Fact(Id('a'))), '''(-(a!))'''),
+                  (Plus(Id('b'), Fact(Id('a'))), '''(b+(a!))'''),
+                  (Divide(Pow(Id('x'),Id('n')),Fact(Id('n'))), '''((x**n)/(n!))'''),
                   ]
         for (expr, res) in testList:
             self.assertEqual(expr.toSympy(), res)

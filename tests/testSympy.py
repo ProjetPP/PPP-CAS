@@ -1,4 +1,4 @@
-from ppp_cas.evaluator import evaluate
+from ppp_cas.evaluator import eval_input
 from unittest import TestCase
 from sympy import latex
 
@@ -6,7 +6,7 @@ class TestSympy(TestCase):
     
     def procedure(self, testCases):
         for (expr, res) in testCases:
-            evaluated = evaluate(expr)
+            evaluated = eval_input(expr)
             self.assertEqual(latex(evaluated), res)
     
     def testNumeric(self):
@@ -29,5 +29,6 @@ class TestSympy(TestCase):
         testCases = [('diff(x**2,x)', '2 x'),
                      ('integrate(exp(-x**2/2), (x,(-oo,oo)))', '\\sqrt{2} \\sqrt{\pi}'),
                      ('summation(1/n**2, (n,(1,oo)))', '\\frac{\pi^{2}}{6}'),
+                     ('summation(2^n/n!, (n,(0,oo)))', 'e^{2}'),
                     ]
         self.procedure(testCases)

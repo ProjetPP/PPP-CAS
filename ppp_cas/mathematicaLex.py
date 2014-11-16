@@ -14,9 +14,6 @@ tokens = (
    'RBRACKET',
    'COMMA',
    'ID',
-   'EQ',
-   'LT',
-   'GT',
    'EXCL',
    'APOSTROPHE',
    'POW',
@@ -33,9 +30,6 @@ t_RBRACE     = r'\}'
 t_LBRACKET   = r'\['
 t_RBRACKET   = r'\]'
 t_COMMA      = r','
-t_EQ         = r'='
-t_LT         = r'<'
-t_GT         = r'>'
 t_EXCL       = r'!'
 t_APOSTROPHE = r'\''
 t_POW        = r'\^'

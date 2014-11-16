@@ -72,6 +72,16 @@ class Opp:
     def toSympy(self):
         return '('+ '-' + self.val.toSympy() +')' 
         
+class Fact:
+    def __init__(self, val):
+        self.val = val
+        
+    def __str__(self):
+        return 'Fact('+str(self.val)+')'
+                
+    def toSympy(self):
+        return '(' + self.val.toSympy() +'!)' 
+        
 class Diff:
     def __init__(self, val,nb):
         self.val = val
@@ -139,6 +149,7 @@ class FunctionCall:
                             'N' : (lambda a: 'N('+a.toSympy()+')'),
                             'D' : (lambda a: 'diff('+a[0].toSympy()+', '+', '.join([l.toSympy() for l in a[1:]])+')'),
                             'Exp' : (lambda a: 'exp('+a.toSympy()+')'),
+                            'Simplify' : (lambda a: 'simplify('+a.toSympy()+')'),
                            }
                             
         if function in mathematicaToSympy.keys():
