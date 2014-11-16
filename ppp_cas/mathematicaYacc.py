@@ -1,6 +1,6 @@
 import ply.yacc as yacc
 from .mathematicaLex import tokens
-from .mathematicaTree import Plus, Minus, Times, Opp, FunctionCall, List, Divide, Diff, Eq, Pow, Id, Fact
+from .mathematicaTree import Plus, Minus, Times, Opp, FunctionCall, List, Divide, Diff, Pow, Id, Fact
 from sympy import latex
 
 precedence = (
@@ -35,18 +35,15 @@ def p_expression_arith(p):
     '''expression : expression PLUS expression
                     | expression MINUS expression
                     | expression TIMES expression
-                    | expression POW expression %prec POW
+                    | expression POW expression
                     | expression DIVIDE expression'''
-    if p[2] == '+':
-        p[0] = Plus(p[1], p[3])
-    elif p[2] == '-':
-        p[0] = Minus(p[1], p[3])
-    elif p[2] == '*':
-        p[0] = Times(p[1], p[3])
-    elif p[2] == '/':
-        p[0] = Divide(p[1], p[3])
-    elif p[2] == '^':
-        p[0] = Pow(p[1], p[3])
+    tokenToNode = { '+' : Plus,
+                    '-' : Minus,
+                    '^' : Pow,
+                    '/' : Divide,
+                    '*' : Times,
+                  }
+    p[0] = tokenToNode[p[2]](p[1], p[3])
         
 def p_expression_fact(p):
     '''expression : expression EXCL'''

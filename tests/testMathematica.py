@@ -1,6 +1,6 @@
 from ppp_cas.mathematicaYacc import mathematicaParser
 from ppp_cas.mathematicaLex import mathematicaLexer
-from ppp_cas.mathematicaTree import Plus, Minus, Times, Opp, FunctionCall, List, Divide, Diff, Eq, Pow, Id, Fact
+from ppp_cas.mathematicaTree import Plus, Minus, Times, Opp, FunctionCall, List, Divide, Diff, Pow, Id, Fact
 from unittest import TestCase
 
 class TestMathematica(TestCase):

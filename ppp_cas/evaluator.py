@@ -21,10 +21,9 @@ from sympy.solvers.diophantine import diophantine
 
 def evaluate(s):
     result = None
-    parser=Parser(s)
+    parser = Parser(s)
     inputFormula=parser.normalize()
     
-    #parsed, arguments, evaluator, evaluated = eval_input(inputFormula)
     evaluated = process(eval_input, inputFormula, timeout=Config().timeout, heap_size=Config().max_heap)
 
     return evaluated
@@ -41,9 +40,6 @@ def eval_input(s):
     })
 
     evaluator = Eval(namespace)
-    # change to True to spare the user from exceptions:
-    if not len(s):
-        return None
 
     transformations = []
     transformations.append(synonyms)
@@ -57,7 +53,6 @@ def eval_input(s):
     except Exception as e:
         raise ValueError(str(e))
     input_repr = repr(evaluated)
-    # namespace['input_evaluated'] = evaluated
 
     return evaluated
 

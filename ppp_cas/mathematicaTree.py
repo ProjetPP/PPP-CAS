@@ -53,14 +53,6 @@ class Pow:
     def toSympy(self):
         return '('+ self.left.toSympy() +'**'+ self.right.toSympy() +')' 
         
-class Eq:
-    def __init__(self, left, right):
-        self.left = left
-        self.right = right
-        
-    def __str__(self):
-        return 'Eq('+str(self.left)+','+str(self.right)+')'
-        
         
 class Opp:
     def __init__(self, val):
@@ -111,9 +103,6 @@ class List:
     def __len__(self):
         return len(self.list)
         
-    def getList(self):
-        return self.list
-        
     def toSympy(self):
         if len(self.list)==0:
             return ''
@@ -131,8 +120,6 @@ class FunctionCall:
         return 'FunctionCall('+str(self.function)+','+str(self.args)+')'
                 
     def toSympy(self):
-        if not type(self.args)==List:
-            return ''
         if type(self.function)==Id:
             return self.translate(self.function.toSympy(), self.args)
             
