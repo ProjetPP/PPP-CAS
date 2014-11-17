@@ -68,6 +68,6 @@ class TestSympy(TestCase):
                      ('Ceiling[Pi]', '4'),
                      ('Limit[Sin[x]/x, x->0]', '1'),
                      ('Limit[(1+x/n)^n, n->Infinity]', 'e^{x}'),
-                     ('Solve[x^2==1, x]', '\left [ \left ( -1\\right ), \quad \left ( 1\\right )\\right ]'),
+                     ('Solve[x^2==1, x]', '\\begin{bmatrix}\\begin{pmatrix}-1\end{pmatrix}, & \\begin{pmatrix}1\end{pmatrix}\end{bmatrix}'),
                     ]
         self.procedure(testCases)
