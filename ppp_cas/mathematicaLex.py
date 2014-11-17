@@ -17,6 +17,8 @@ tokens = (
    'EXCL',
    'APOSTROPHE',
    'POW',
+   'ARROW',
+   'EQ',
 )
 
 t_PLUS       = r'\+'
@@ -33,6 +35,8 @@ t_COMMA      = r','
 t_EXCL       = r'!'
 t_APOSTROPHE = r'\''
 t_POW        = r'\^'
+t_ARROW      = r'->'
+t_EQ      = r'=='
 
 def t_NUMBER(t):
     r'([0-9]*\.[0-9]+|[0-9]+)'

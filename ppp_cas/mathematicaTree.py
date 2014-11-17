@@ -54,6 +54,29 @@ class Pow:
         return '('+ self.left.toSympy() +'**'+ self.right.toSympy() +')' 
         
         
+class Arrow:
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
+        
+    def __str__(self):
+        return 'Arrow('+str(self.left)+','+str(self.right)+')'
+                
+    def toSympy(self):
+        return self.left.toSympy() + ',' + self.right.toSympy()
+        
+class Eq:
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
+        
+    def __str__(self):
+        return 'Eq('+str(self.left)+','+str(self.right)+')'
+                
+    def toSympy(self):
+        return '('+self.left.toSympy() + '-' + self.right.toSympy()+')'
+        
+        
 class Opp:
     def __init__(self, val):
         self.val = val
@@ -75,12 +98,15 @@ class Fact:
         return '(' + self.val.toSympy() +'!)' 
         
 class Diff:
-    def __init__(self, val,nb):
+    def __init__(self, val, nb):
         self.val = val
         self.nb=nb
         
     def __str__(self):
         return 'Diff('+str(self.val)+','+str(self.nb)+')'
+        
+    def toSympy(self):
+        return 'Derivative('+self.val.toSympy()+','+self.val.args[0].toSympy()+','+str(self.nb)+')'
         
 class List:
     def __init__(self, l):
@@ -102,6 +128,9 @@ class List:
         
     def __len__(self):
         return len(self.list)
+        
+    def getList(self):
+        return self.list
         
     def toSympy(self):
         if len(self.list)==0:
@@ -137,8 +166,18 @@ class FunctionCall:
                             'D' : (lambda a: 'diff('+a[0].toSympy()+', '+', '.join([l.toSympy() for l in a[1:]])+')'),
                             'Exp' : (lambda a: 'exp('+a.toSympy()+')'),
                             'Simplify' : (lambda a: 'simplify('+a.toSympy()+')'),
+                            'Power' : (lambda a: 'Pow('+a.toSympy()+')'),
+                            'Log' : (lambda a: 'log('+List(list(reversed(a.getList()))).toSympy()+')'),
+                            'Log10' : (lambda a: '(log('+a[0].toSympy()+'))/(log(10))'),
+                            'Log2' : (lambda a: '(log('+a[0].toSympy()+'))/(log(2))'),
+                            'Factorial' : (lambda a: '('+a[0].toSympy()+'!)'),
+                            'Abs' : (lambda a: 'Abs('+a[0].toSympy()+')'),
+                            'Ceiling' : (lambda a: 'ceiling('+a[0].toSympy()+')'),
+                            'Floor' : (lambda a: 'floor('+a[0].toSympy()+')'),
+                            'Limit' : (lambda a: 'limit('+a[0].toSympy() +','+ a[1].toSympy()+')'),
+                            'Solve' : (lambda a: 'solve(['+a[0].toSympy() +'],['+ a[1].toSympy()+'])'),
                            }
-                            
+
         if function in mathematicaToSympy.keys():
             return '('+mathematicaToSympy[function](args)+')'
         return '('+function+'('+ self.args.toSympy() +')'+')'
@@ -157,6 +196,8 @@ class Id:
         mathematicaToSympy={'Infinity' : 'oo',
                             'I' : 'I',
                             'Pi' : 'pi',
+                            'GoldenRatio' : 'GoldenRatio',
+                            'EulerGamma' : 'EulerGamma',
                            }
         if id in mathematicaToSympy.keys():
             return mathematicaToSympy[id]

@@ -1,6 +1,6 @@
 from ppp_cas.mathematicaYacc import mathematicaParser
 from ppp_cas.mathematicaLex import mathematicaLexer
-from ppp_cas.mathematicaTree import Plus, Minus, Times, Opp, FunctionCall, List, Divide, Diff, Pow, Id, Fact
+from ppp_cas.mathematicaTree import Plus, Minus, Times, Opp, FunctionCall, List, Divide, Diff, Pow, Id, Fact, Arrow, Eq
 from unittest import TestCase
 
 class TestMathematica(TestCase):
@@ -56,6 +56,9 @@ class TestMathematica(TestCase):
                   ('''Integrate[1/(x^3 + 1), x]''', FunctionCall(Id('Integrate'),List([Divide(Id('1'),Plus(Pow(Id('x'),Id('3')),Id('1'))), Id('x')]))),
                   ('''Integrate[1/(x^3 + 1), {x, 0, 1}]''', FunctionCall(Id('Integrate'),List([Divide(Id('1'),Plus(Pow(Id('x'),Id('3')),Id('1'))), List([Id('x'), Id('0'), Id('1')])]))),
                   ('''Integrate[Sin[x*y], {x, 0, 1}, {y, 0, x}]''', FunctionCall(Id('Integrate'),List([FunctionCall(Id('Sin'),List([Times(Id('x'),Id('y'))])), List([Id('x'), Id('0'), Id('1')]), List([Id('y'), Id('0'), Id('x')])]))),
+                  ('''Limit[Sin[x]/x, x->0]''', FunctionCall(Id('Limit'),List([Divide(FunctionCall(Id('Sin'),List([Id('x')])),Id('x')), Arrow(Id('x'), Id('0'))]))),
+                  ('''Limit[(1+x/n)^n, x->Infinity]''', FunctionCall(Id('Limit'),List([Pow(Plus(Id('1'),Divide(Id('x'),Id('n'))),Id('n')), Arrow(Id('x'), Id('Infinity'))]))),
+                  ('''Solve[x^2==1, x]''', FunctionCall(Id('Solve'),List([Eq(Pow(Id('x'),Id('2')),Id('1')), Id('x')]))),
                   ]
         for (expr, res) in testList:
             self.assertEqual(str(mathematicaParser.parse(expr, lexer=mathematicaLexer)), str(res))
@@ -103,6 +106,9 @@ class TestMathematica(TestCase):
                   (Opp(Fact(Id('a'))), '''(-(a!))'''),
                   (Plus(Id('b'), Fact(Id('a'))), '''(b+(a!))'''),
                   (Divide(Pow(Id('x'),Id('n')),Fact(Id('n'))), '''((x**n)/(n!))'''),
+                  (FunctionCall(Id('Limit'),List([Divide(FunctionCall(Id('Sin'),List([Id('x')])),Id('x')), Arrow(Id('x'), Id('0'))])), '''(limit(((sin(x))/x),x,0))'''),
+                  (FunctionCall(Id('Limit'),List([Pow(Plus(Id('1'),Divide(Id('x'),Id('n'))),Id('n')), Arrow(Id('x'), Id('Infinity'))])), '''(limit(((1+(x/n))**n),x,oo))'''),
+                  (FunctionCall(Id('Solve'),List([Eq(Pow(Id('x'),Id('2')),Id('1')), Id('x')])), '''(solve([((x**2)-1)],[x]))'''),
                   ]
         for (expr, res) in testList:
             self.assertEqual(expr.toSympy(), res)

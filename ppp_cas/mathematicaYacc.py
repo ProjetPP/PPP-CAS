@@ -1,9 +1,10 @@
 import ply.yacc as yacc
 from .mathematicaLex import tokens
-from .mathematicaTree import Plus, Minus, Times, Opp, FunctionCall, List, Divide, Diff, Pow, Id, Fact
+from .mathematicaTree import Plus, Minus, Times, Opp, FunctionCall, List, Divide, Diff, Pow, Id, Fact, Arrow, Eq
 from sympy import latex
 
 precedence = (
+    ('nonassoc', 'ARROW', 'EQ'),
     ('nonassoc', 'NUMBER'),
     ('nonassoc', 'ID'),
     ('left', 'PLUS', 'MINUS'),
@@ -44,6 +45,14 @@ def p_expression_arith(p):
                     '*' : Times,
                   }
     p[0] = tokenToNode[p[2]](p[1], p[3])
+        
+def p_expression_arrow(p):
+    '''expression : ID ARROW expression'''
+    p[0] = Arrow(Id(p[1]), p[3])
+    
+def p_expression_eq(p):
+    '''expression : expression EQ expression'''
+    p[0] = Eq(p[1], p[3])
         
 def p_expression_fact(p):
     '''expression : expression EXCL'''
