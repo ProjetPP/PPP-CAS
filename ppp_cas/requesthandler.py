@@ -27,7 +27,7 @@ class RequestHandler:
             outputFormula=evaluate(self.tree.value)
         except Exception:
             return []
-        outputTree=Resource(latex(outputFormula))
+        outputTree=Resource(latex(outputFormula), value_type='math-latex')
             
         measures = {
             'accuracy': 1, 
