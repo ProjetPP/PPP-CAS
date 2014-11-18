@@ -68,6 +68,8 @@ class TestSympy(TestCase):
                      ('Ceiling[Pi]', '4'),
                      ('Limit[Sin[x]/x, x->0]', '1'),
                      ('Limit[(1+x/n)^n, n->Infinity]', 'e^{x}'),
+                     ('Limit[Sum[1/i, {i, 1, n}]- Log[n], n->Infinity]', '\gamma'),
                      ('Solve[x^2==1, x]', '\\begin{bmatrix}\\begin{pmatrix}-1\end{pmatrix}, & \\begin{pmatrix}1\end{pmatrix}\end{bmatrix}'),
+                     ('(a/(b+1)/c)+1/(d+1)', '\\frac{a \left(d + 1\\right) + c \left(b + 1\\right)}{c \left(b + 1\\right) \left(d + 1\\right)}'),
                     ]
         self.procedure(testCases)
