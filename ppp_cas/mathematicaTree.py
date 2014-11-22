@@ -161,7 +161,7 @@ class FunctionCall:
                             'Arcsin' : (lambda a: 'asin('+a[0].toSympy()+')'),
                             'Arctan' : (lambda a: 'atan('+a[0].toSympy()+')'),
                             'Sum' : (lambda a: 'summation('+a[0].toSympy()+''.join(([(lambda l:',('+l[0].toSympy()+',('+ l[1].toSympy() +','+ l[2].toSympy() +'))')(l) for l in a[1:]]))+')'),
-                            'Integrate' : (lambda a: 'integrate('+a[0].toSympy()+''.join([(lambda l:',('+l.toSympy()+')')(l) for l in a[1:]])+')'),
+                            'Integrate' : (lambda a: 'integrate('+a[0].toSympy()+''.join(list(reversed([(lambda l:',('+l.toSympy()+')')(l) for l in a[1:]])))+')'),
                             'N' : (lambda a: 'N('+a.toSympy()+')'),
                             'D' : (lambda a: 'diff('+a[0].toSympy()+', '+', '.join([l.toSympy() for l in a[1:]])+')'),
                             'Exp' : (lambda a: 'exp('+a.toSympy()+')'),

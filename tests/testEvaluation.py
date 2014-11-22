@@ -38,7 +38,7 @@ class TestSympy(TestCase):
                      ('Sum[j/i^6, {i, 1, Infinity}, {j, 0 ,m}]', '\\frac{\pi^{6} m}{1890} \left(m + 1\\right)'),
                      ('Integrate[1/(x^3 + 1), x]', '\\frac{1}{3} \log{\left (x + 1 \\right )} - \\frac{1}{6} \log{\left (x^{2} - x + 1 \\right )} + \\frac{\sqrt{3}}{3} \operatorname{atan}{\left (\\frac{\sqrt{3}}{3} \left(2 x - 1\\right) \\right )}'),
                      ('Integrate[1/(x^3 + 1), {x, 0, 1}]', '\\frac{1}{3} \log{\left (2 \\right )} + \\frac{\sqrt{3} \pi}{9}'),
-                     ('Integrate[Sin[x*y], {x, 0, 1}, {y, 0, x}]', '\\begin{cases} 0 & \\text{for}\: x = 0 \\\\2 \log{\left (x \\right )} - \\frac{1}{2} \log{\left (x^{2} \\right )} - \operatorname{Ci}{\left (x \\right )} + \gamma & \\text{otherwise} \end{cases}'),
+                     ('Integrate[Sin[x*y], {x, 0, 1}, {y, 0, x}]', '- \\frac{1}{2} \\operatorname{Ci}{\\left (1 \\right )} + \\frac{\\gamma}{2}'),
                      ('D[x^2,x]', '2 x'),
                      ('D[x^3,x,x]', '6 x'),
                      ('D[x^4, {x,2}]', '12 x^{2}'),

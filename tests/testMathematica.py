@@ -93,7 +93,7 @@ class TestMathematica(TestCase):
                   (FunctionCall(Id('Sum'),List([Divide(Id('j'),Pow(Id('i'),Id('6'))), List([Id('i'), Id('1'), Id('Infinity')]), List([Id('j'), Id('0'), Id('m')])])), '''(summation((j/(i**6)),(i,(1,oo)),(j,(0,m))))'''),
                   (FunctionCall(Id('Integrate'),List([Divide(Id('1'),Plus(Pow(Id('x'),Id('3')),Id('1'))), Id('x')])), '''(integrate((1/((x**3)+1)),(x)))'''),
                   (FunctionCall(Id('Integrate'),List([Divide(Id('1'),Plus(Pow(Id('x'),Id('3')),Id('1'))), List([Id('x'), Id('0'), Id('1')])])),'''(integrate((1/((x**3)+1)),(x, 0, 1)))'''),
-                  (FunctionCall(Id('Integrate'),List([FunctionCall(Id('Sin'),List([Times(Id('x'),Id('y'))])), List([Id('x'), Id('0'), Id('1')]), List([Id('y'), Id('0'), Id('x')])])), '''(integrate((sin((x*y))),(x, 0, 1),(y, 0, x)))'''),
+                  (FunctionCall(Id('Integrate'),List([FunctionCall(Id('Sin'),List([Times(Id('x'),Id('y'))])), List([Id('x'), Id('0'), Id('1')]), List([Id('y'), Id('0'), Id('x')])])), '''(integrate((sin((x*y))),(y, 0, x),(x, 0, 1)))'''),
                   (FunctionCall(Id('N'), List([FunctionCall(Id('Sqrt'), List([Id('42')]))])), '''(N((sqrt(42))))''' ),
                   (FunctionCall(Id('N'), List([FunctionCall(Id('Sqrt'), List([Id('42')])), Id('20')])), '''(N((sqrt(42)), 20))''' ),
                   (FunctionCall(Id('D'), List([Id('f'), Id('x')])), '''(diff(f, x))'''),

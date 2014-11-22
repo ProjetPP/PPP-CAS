@@ -30,5 +30,6 @@ class TestSympy(TestCase):
                      ('integrate(exp(-x**2/2), (x,(-oo,oo)))', '\\sqrt{2} \\sqrt{\pi}'),
                      ('summation(1/n**2, (n,(1,oo)))', '\\frac{\pi^{2}}{6}'),
                      ('summation(2^n/n!, (n,(0,oo)))', 'e^{2}'),
+                     ('(integrate((sin((x*y))), (y, 0, x), (x, 0, 1)))', '- \\frac{1}{2} \operatorname{Ci}{\left (1 \\right )} + \\frac{\gamma}{2}')
                     ]
         self.procedure(testCases)
