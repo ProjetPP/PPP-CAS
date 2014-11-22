@@ -224,6 +224,7 @@ def custom_implicit_transformation(result, local_dict, global_dict):
 
 
 SYNONYMS = {
+    'derivate': 'diff',
     'derivative': 'diff',
     'derive': 'diff',
     'integral': 'integrate',
