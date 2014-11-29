@@ -177,9 +177,11 @@ class FunctionCall:
                             'Limit' : (lambda a: 'limit('+a[0].toSympy() +','+ a[1].toSympy()+')'),
                             'Solve' : (lambda a: 'solve(['+a[0].toSympy() +'],['+ a[1].toSympy()+'])'),
                            }
-
-        if function in mathematicaToSympy.keys():
-            return '('+mathematicaToSympy[function](args)+')'
+                           
+        for name in mathematicaToSympy.keys():
+            if name == function:
+                return '('+mathematicaToSympy[name](args)+')'
+                
         return '('+function+'('+ self.args.toSympy() +')'+')'
         
 class Id:

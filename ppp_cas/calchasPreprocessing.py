@@ -9,13 +9,7 @@ def preprocessImplicitMultiplication(formula):
         tok = calchasLexer.token()
         if not tok:
             break
-        if previous.type == 'RPAREN' and tok.type == 'LPAREN':
-            output = output + '*'
-        elif previous.type == 'RPAREN' and tok.type == 'ID':
-            output = output + '*'
-        elif previous.type == 'NUMBER' and tok.type == 'LPAREN':
-            output = output + '*'
-        elif previous.type in ['ID', 'NUMBER'] and tok.type in ['ID', 'NUMBER']:
+        if (previous.type == 'RPAREN' and tok.type == 'LPAREN') or(previous.type == 'RPAREN' and tok.type == 'ID') or (previous.type == 'NUMBER' and tok.type == 'LPAREN') or (previous.type in ['ID', 'NUMBER'] and tok.type in ['ID', 'NUMBER']):
             output = output + '*'
         output = output + tok.value
         previous = tok

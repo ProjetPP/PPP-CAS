@@ -3,7 +3,6 @@
 import sys
 import traceback
 import collections
-from .utils import Eval
 from sympy import latex, series, sympify, solve, Derivative, Integral, Symbol, diff, integrate
 import sympy
 from sympy.core.function import FunctionClass
@@ -37,8 +36,6 @@ def eval_input(s):
         'plot': plot,  # prevent textplot from printing stuff
         'help': lambda f: f
     })
-
-    evaluator = Eval(namespace)
 
     transformations = []
     transformations.extend(standard_transformations)
