@@ -3,7 +3,7 @@
 import sys
 import traceback
 import collections
-from .utils import Eval, arguments, custom_implicit_transformation, synonyms
+from .utils import Eval
 from sympy import latex, series, sympify, solve, Derivative, Integral, Symbol, diff, integrate
 import sympy
 from sympy.core.function import FunctionClass
@@ -23,7 +23,6 @@ def evaluate(s):
     result = None
     parser = Parser(s)
     inputFormula=parser.normalize()
-    
     evaluated = process(eval_input, inputFormula, timeout=Config().timeout, heap_size=Config().max_heap)
 
     return evaluated
@@ -42,9 +41,7 @@ def eval_input(s):
     evaluator = Eval(namespace)
 
     transformations = []
-    transformations.append(synonyms)
     transformations.extend(standard_transformations)
-    transformations.extend((convert_xor, custom_implicit_transformation))
     parsed = stringify_expr(s, {}, namespace, transformations)
     try:
         evaluated = eval_expr(parsed, {}, namespace)
