@@ -1,95 +1,61 @@
 import re
 
-class Plus:
+class BinaryOperator:
     def __init__(self, left, right):
         self.left = left
         self.right = right
-        
+
     def __str__(self):
-        return 'Plus('+str(self.left)+','+str(self.right)+')'
-        
+        return '%s(%s, %s)' % (self.__class__.__name__, self.left, self.right)
+
+    def toSympy(self, op):
+        return '(%s%s%s)' % (self.left.toSympy(), op, self.right.toSympy())
+
+class Plus(BinaryOperator):
     def toSympy(self):
-        return '('+ self.left.toSympy() +'+'+ self.right.toSympy() +')' 
-        
-class Divide:
-    def __init__(self, left, right):
-        self.left = left
-        self.right = right
-        
-    def __str__(self):
-        return 'Divide('+str(self.left)+','+str(self.right)+')'        
-        
+        return super().toSympy('+')
+
+class Divide(BinaryOperator):
     def toSympy(self):
-        return '('+ self.left.toSympy() +'/'+ self.right.toSympy() +')'
-                
-class Mod:
-    def __init__(self, left, right):
-        self.left = left
-        self.right = right
-        
-    def __str__(self):
-        return 'Mod('+str(self.left)+','+str(self.right)+')'        
-        
+        return super().toSympy('/')
+
+class Mod(BinaryOperator):
     def toSympy(self):
-        return '('+ self.left.toSympy() +'%'+ self.right.toSympy() +')' 
-        
-class Times:
-    def __init__(self, left, right):
-        self.left = left
-        self.right = right
-        
-    def __str__(self):
-        return 'Times('+str(self.left)+','+str(self.right)+')'
-            
+        return super().toSympy('%')
+
+class Times(BinaryOperator):
     def toSympy(self):
-        return '('+ self.left.toSympy() +'*'+ self.right.toSympy() +')' 
-        
-class Minus:
-    def __init__(self, left, right):
-        self.left = left
-        self.right = right
-        
-    def __str__(self):
-        return 'Minus('+str(self.left)+','+str(self.right)+')'
-                
+        return super().toSympy('*')
+
+class Minus(BinaryOperator):
     def toSympy(self):
-        return '('+ self.left.toSympy() +'-'+ self.right.toSympy() +')' 
-        
-class Pow:
-    def __init__(self, left, right):
-        self.left = left
-        self.right = right
-        
-    def __str__(self):
-        return 'Pow('+str(self.left)+','+str(self.right)+')'
-        
+        return super().toSympy('-')
+
+class Pow(BinaryOperator):
     def toSympy(self):
-        return '('+ self.left.toSympy() +'**'+ self.right.toSympy() +')' 
-       
-class Opp:
+        return super().toSympy('**')
+
+
+
+class UnaryOperator:
     def __init__(self, val):
         self.val = val
-        
+
     def __str__(self):
-        return 'Opp('+str(self.val)+')'
-                
+        return '%s(%s)' % (self.__class__.__name__, self.val)
+
+class Opp(UnaryOperator):
     def toSympy(self):
-        return '('+ '-' + self.val.toSympy() +')' 
-        
-class Fact:
-    def __init__(self, val):
-        self.val = val
-        
-    def __str__(self):
-        return 'Fact('+str(self.val)+')'
-                
+        return '('+ '-' + self.val.toSympy() +')'
+
+class Fact(UnaryOperator):
     def toSympy(self):
-        return '(gamma(' + self.val.toSympy() +'+1))' 
-        
+        return '(gamma(' + self.val.toSympy() +'+1))'
+
 class List:
     def __init__(self, l):
         self.list = l
-        
+
     def __str__(self):
         if len(self.list)==0:
             return 'List([])'
@@ -97,19 +63,19 @@ class List:
         for e in self.list[1:]:
             s = s + ', ' + str(e)
         return s+'])'
-        
+
     def __getitem__(self,index):
         return self.list[index]
-        
+
     def __add__(self, other):
         return List(self.list+other.list)
-        
+
     def __len__(self):
         return len(self.list)
-        
+
     def getList(self):
         return self.list
-        
+
     def toSympy(self):
         if len(self.list)==0:
             return ''
@@ -117,7 +83,7 @@ class List:
         for e in self.list[1:]:
             s = s + ', ' + e.toSympy()
         return s
-        
+
     def toSympyRightAssociative(self):
         def rightParentheses(l):
             if len(l) == 0:
@@ -126,30 +92,23 @@ class List:
                 return l[0].toSympy()
             return l[0].toSympy()+',('+rightParentheses(l[1:])+')'
         return rightParentheses(self.list)
-        
-class Eq:
-    def __init__(self, left, right):
-        self.left = left
-        self.right = right
-        
-    def __str__(self):
-        return 'Eq('+str(self.left)+','+str(self.right)+')'
-                
+
+class Eq(BinaryOperator):
     def toSympy(self):
-        return '('+self.left.toSympy() + '-' + self.right.toSympy()+')'
- 
+        return super().toSympy('-')
+
 class FunctionCall:
     def __init__(self, function, args):
         self.function = function
         self.args = args
-        
+
     def __str__(self):
         return 'FunctionCall('+str(self.function)+','+str(self.args)+')'
-                
+
     def toSympy(self):
         if type(self.function) == Id:
             return self.translate(self.function.toSympy(), self.args)
-            
+
     def translate(self, function, args):
         mathematicaToSympy={r'^[aA]bs$' : (lambda a: 'Abs('+a.toSympy()+')'),
                             r'^[mM]od$' : (lambda a: 'Abs('+a.toSympy()+')'),
@@ -217,22 +176,22 @@ class FunctionCall:
                             r'^[lL]im(it)?[lL]$' : (lambda a: 'limit('+a.toSympy()+',dir=\'-\')'),
                             r'^[lL]im(it)?[rR]$' : (lambda a: 'limit('+a.toSympy()+',dir=\'+\')'),
                            }
-        
+
         for pattern in mathematicaToSympy.keys():
             if re.match(pattern, function):
                 return '('+mathematicaToSympy[pattern](args)+')'
         return '('+function+'('+ self.args.toSympy() +')'+')'
-        
+
 class Id:
     def __init__(self, id):
         self.id=id
-    
+
     def __str__(self):
         return 'Id('+str(self.id)+')'
-        
+
     def toSympy(self):
         return self.translateId(self.id)
-        
+
     def translateId(self, name):
         if type(name) == int:
             return str(name)
