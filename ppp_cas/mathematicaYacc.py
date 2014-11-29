@@ -24,9 +24,9 @@ precedence = (
 
 start = 'expression'
 
-def p_expr_uminus(p):
+def p_expr_unary(p):
     '''expression : MINUS expression %prec UMINUS
-                    | PLUS expression %prec UPLUS'''
+                  | PLUS expression %prec UPLUS'''
     if p[1]=='-':
         p[0] = Opp(p[2])
     else:
@@ -34,10 +34,10 @@ def p_expr_uminus(p):
 
 def p_expression_arith(p):
     '''expression : expression PLUS expression
-                    | expression MINUS expression
-                    | expression TIMES expression
-                    | expression POW expression
-                    | expression DIVIDE expression'''
+                  | expression MINUS expression
+                  | expression TIMES expression
+                  | expression POW expression
+                  | expression DIVIDE expression'''
     tokenToNode = { '+' : Plus,
                     '-' : Minus,
                     '^' : Pow,
@@ -64,8 +64,8 @@ def p_expression_term(p):
 
 def p_function_call_arg(p):
     '''expression : expression LBRACKET expression_list RBRACKET'''
-    p[0] = FunctionCall(p[1], List(p[3]))
-    
+    p[0] = FunctionCall(p[1], p[3])
+
 def p_function_call_arg_diff(p):
     '''expression : expression APOSTROPHE LBRACKET expression_list RBRACKET'''
     p[0] = Diff(FunctionCall(p[1], List(p[4])),1)
@@ -105,4 +105,4 @@ def p_list(p):
 def p_error(p):
     pass
 
-mathematicaParser = yacc.yacc()
+mathematicaParser = yacc.yacc(debug=0, write_tables=0)
