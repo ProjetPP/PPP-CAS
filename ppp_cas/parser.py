@@ -3,18 +3,24 @@
 
 from .mathematicaYacc import mathematicaParser
 from .mathematicaLex import mathematicaLexer
+from .calchasPreprocessing import calchasToSympy
 from re import match, sub
 
 class Parser():
     def __init__(self, expr):
         self.expr=expr
-        
+
+    def fromCalchas(self):
+        result = calchasToSympy('('+self.expr+')')
+        if result:
+            self.expr=result
+
     def fromMathematica(self):
         result = mathematicaParser.parse('('+self.expr+')', lexer=mathematicaLexer)
         if result:
             self.expr=result.toSympy()
-        
+
     def normalize(self):
         self.fromMathematica()
+        self.fromCalchas()
         return 'simplify('+self.expr+',2)'
-        
