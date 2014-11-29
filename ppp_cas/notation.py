@@ -4,6 +4,6 @@ def isMath(formula):
 
 def relevance(inputFormula, outputTree):
     lenOutput = len(str(outputTree))
-    if lenOutput!=0:
-        return (len(inputFormula))/lenOutput
+    if lenOutput != 0:
+        return len(inputFormula)/lenOutput
     return 0
