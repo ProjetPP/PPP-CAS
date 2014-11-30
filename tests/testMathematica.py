@@ -59,6 +59,7 @@ class TestMathematica(TestCase):
                   ('''Limit[Sin[x]/x, x->0]''', FunctionCall(Id('Limit'),List([Divide(FunctionCall(Id('Sin'),List([Id('x')])),Id('x')), Arrow(Id('x'), Id('0'))]))),
                   ('''Limit[(1+x/n)^n, x->Infinity]''', FunctionCall(Id('Limit'),List([Pow(Plus(Id('1'),Divide(Id('x'),Id('n'))),Id('n')), Arrow(Id('x'), Id('Infinity'))]))),
                   ('''Solve[x^2==1, x]''', FunctionCall(Id('Solve'),List([Eq(Pow(Id('x'),Id('2')),Id('1')), Id('x')]))),
+                  ('''Sin'[x]''', Diff(FunctionCall(Id('Sin'),List([Id('x')])),1))
                   ]
         for (expr, res) in testList:
             self.assertEqual(str(mathematicaParser.parse(expr, lexer=mathematicaLexer)), str(res))
@@ -109,6 +110,7 @@ class TestMathematica(TestCase):
                   (FunctionCall(Id('Limit'),List([Divide(FunctionCall(Id('Sin'),List([Id('x')])),Id('x')), Arrow(Id('x'), Id('0'))])), '''(limit(((sin(x))/x),x,0))'''),
                   (FunctionCall(Id('Limit'),List([Pow(Plus(Id('1'),Divide(Id('x'),Id('n'))),Id('n')), Arrow(Id('x'), Id('Infinity'))])), '''(limit(((1+(x/n))**n),x,oo))'''),
                   (FunctionCall(Id('Solve'),List([Eq(Pow(Id('x'),Id('2')),Id('1')), Id('x')])), '''(solve([((x**2)-1)],[x]))'''),
+                  (Diff(FunctionCall(Id('Sin'),List([Id('x')])),1), '''diff((sin(x)),x,1)''')
                   ]
         for (expr, res) in testList:
             self.assertEqual(expr.toSympy(), res)

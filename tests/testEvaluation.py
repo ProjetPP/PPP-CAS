@@ -58,6 +58,7 @@ class TestEvaluation(TestCase):
                      ('D[x^4, {x,2}]', '12 x^{2}'),
                      ('D[x^4*Cos[y^4], {x,2}, {y,3}]', '96 x^{2} y \left(8 y^{8} \sin{\left (y^{4} \\right )} - 18 y^{4} \cos{\left (y^{4} \\right )} - 3 \sin{\left (y^{4} \\right )}\\right)'),
                      ('D[x^4*Cos[y]^z, {x,2}, y, {z,3}]', '- 12 x^{2} \left(z \log{\left (\cos{\left (y \\right )} \\right )} + 3\\right) \log^{2}{\left (\cos{\left (y \\right )} \\right )} \sin{\left (y \\right )} \cos^{z - 1}{\left (y \\right )}'),
+                     ('Sin\'[x]', '\\cos{\\left (x \\right )}'),
                      ('N[Pi]', '3.14159265358979'),
                      ('N[Sqrt[2], 100]', '1.414213562373095048801688724209698078569671875376948073176679737990732478462107038850387534327641573'),
                      ('N[GoldenRatio,100]', '1.618033988749894848204586834365638117720309179805762862135448622705260462818902449707207204189391137'),

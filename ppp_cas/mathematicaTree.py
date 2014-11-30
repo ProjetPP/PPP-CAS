@@ -63,7 +63,7 @@ class Diff:
         return 'Diff('+str(self.val)+','+str(self.nb)+')'
 
     def toSympy(self):
-        return 'Derivative('+self.val.toSympy()+','+self.val.args[0].toSympy()+','+str(self.nb)+')'
+        return 'diff('+self.val.toSympy()+','+self.val.args[0].toSympy()+','+str(self.nb)+')'
 
 class List:
     def __init__(self, l):

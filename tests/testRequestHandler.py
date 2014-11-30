@@ -17,6 +17,7 @@ class TestRequestHandler(TestCase):
         for (expr, res) in testCases:
             handler = RequestHandler(Request(0, 'math', Sentence(expr)))
             self.assertEqual(len(handler.answer()), res)
+        self.assertEqual(len(RequestHandler(Request(0, 'math', Resource(''))).answer()), 0)
                   
     def testMath(self):
         testCases=[('5+7', 1),
