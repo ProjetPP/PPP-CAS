@@ -6,13 +6,13 @@ import resource
 import multiprocessing
 
 processesSpawned = 1
-class SupyProcess(multiprocessing.Process):
+class SupyProcess(multiprocessing.Process): # pragma: no cover
     def __init__(self, *args, **kwargs):
         global processesSpawned
         processesSpawned += 1
         super(SupyProcess, self).__init__(*args, **kwargs)
 
-class CommandProcess(SupyProcess):
+class CommandProcess(SupyProcess): # pragma: no cover
     """Just does some extra logging and error-recovery for commands that need
     to run in processes.
     """
@@ -27,11 +27,11 @@ class CommandProcess(SupyProcess):
     def run(self):
         self.__parent.run()
         
-class ProcessTimeoutError(Exception):
+class ProcessTimeoutError(Exception): # pragma: no cover
     """Gets raised when a process is killed due to timeout."""
     pass
         
-def process(f, *args, **kwargs):
+def process(f, *args, **kwargs): # pragma: no cover
     """Runs a function <f> in a subprocess.
     
     Several extra keyword arguments can be supplied. 
