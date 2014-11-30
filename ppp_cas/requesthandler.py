@@ -7,7 +7,7 @@ from sympy import count_ops, latex
 from sympy.parsing.sympy_parser import parse_expr
 
 from .evaluator import evaluate
-from .notation import relevance, isMath
+from .notation import relevance, isMath, traceContainsSpellChecker
 
 class RequestHandler:
     def __init__(self, request):
@@ -19,21 +19,16 @@ class RequestHandler:
     def answer(self):
         if not isinstance(self.tree, Sentence):
             return []
-            
-        if not isMath(self.tree.value):
+
+        if not isMath(self.tree.value) or traceContainsSpellChecker(self.trace):
             return []
-        
-        try:
-            outputFormula=evaluate(self.tree.value)
-        except Exception:
-            return []
+
+        outputFormula=evaluate(self.tree.value)
         outputTree=Resource(latex(outputFormula), value_type='math-latex')
-            
         measures = {
-            'accuracy': 1, 
+            'accuracy': 1,
             'relevance': relevance(self.tree.value, outputFormula)
         }
         trace = self.trace + [TraceItem('CAS', outputTree, measures)]
         response = Response(self.language, outputTree, measures, trace)
         return [response]
-
