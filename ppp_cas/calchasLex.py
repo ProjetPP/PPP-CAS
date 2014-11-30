@@ -12,10 +12,12 @@ tokens = (
     'ID',
     'EXCL',
     'POW',
+    'DTIMES',
     'MOD',
-    'EQ', 
+    'EQ',
 )
 
+t_DTIMES     = r'\*\*'
 t_PLUS       = r'\+'
 t_MINUS      = r'-'
 t_TIMES      = r'\*'

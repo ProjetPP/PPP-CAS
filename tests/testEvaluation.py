@@ -143,6 +143,7 @@ class TestEvaluation(TestCase):
                      ('derivate(x**2 y^3,x)', '2 x y^{3}'),
                      ('derivative(x**2 y^3,x)', '2 x y^{3}'),
                      ('integral(Exp(-x^2/2), x, -infinity, oo)', '\\sqrt{2} \\sqrt{\pi}'),
+                     ('integral(Exp(-x**2/2), x, -infinity, oo)', '\\sqrt{2} \\sqrt{\pi}'),
                      ('sum(1/i^6, i, 1, Infty)', '\\frac{\pi^{6}}{945}'),
                      ('int(1/(x^3 + 1), x)', '\\frac{1}{3} \log{\left (x + 1 \\right )} - \\frac{1}{6} \log{\left (x^{2} - x + 1 \\right )} + \\frac{\sqrt{3}}{3} \operatorname{atan}{\left (\\frac{\sqrt{3}}{3} \left(2 x - 1\\right) \\right )}'),
                      ('Integrate(1/(x^3 + 1), x, 0, 1)', '\\frac{1}{3} \log{\left (2 \\right )} + \\frac{\sqrt{3} \pi}{9}'),

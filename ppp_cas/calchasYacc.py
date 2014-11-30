@@ -13,6 +13,7 @@ precedence = (
     ('left', 'UPLUS'),
     ('left', 'MOD'),
     ('right', 'POW'),
+    ('right', 'DTIMES'),
     ('left', 'EXCL'),
     ('nonassoc', 'RPAREN'),
     ('nonassoc', 'LPAREN'),
@@ -35,20 +36,18 @@ def p_expression_arith(p):
                   | expression TIMES expression
                   | expression POW expression
                   | expression MOD expression
-                  | expression DIVIDE expression'''
+                  | expression DIVIDE expression
+                  | expression DTIMES expression'''
     tokenToNode = { '+' : Plus,
                     '-' : Minus,
                     '^' : Pow,
                     '/' : Divide,
                     '*' : Times,
-                    '%' : Mod
+                    '%' : Mod,
+                    '**' : Pow,
                   }
     p[0] = tokenToNode[p[2]](p[1], p[3])
-        
-def p_expression_exp(p):
-    '''expression : expression TIMES TIMES expression'''
-    p[0] = Pow(p[1], p[4])
-        
+
 def p_expression_fact(p):
     '''expression : expression EXCL'''
     p[0] = Fact(p[1])

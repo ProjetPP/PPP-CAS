@@ -25,6 +25,8 @@ class TestCalchas(TestCase):
                   ('''-+a''', Opp(Id('a'))),
                   ('''a*-b''', Times(Id('a'),Opp(Id('b')))),
                   ('''-a*b''', Times(Opp(Id('a')),Id('b'))),
+                  ('''-a^b''', Opp(Pow(Id('a'),Id('b')))),
+                  ('''-c**d''', Opp(Pow(Id('c'),Id('d')))),
                   ('''a/b''', Divide(Id('a'), Id('b'))),
                   ('''a-b''', Minus(Id('a'), Id('b'))),
                   ('''a^b''', Pow(Id('a'), Id('b'))),
