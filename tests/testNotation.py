@@ -19,14 +19,17 @@ class TestSympy(TestCase):
                                  'integrate(exp(-x**2/2), (x,(-oo,oo)))',
                                  'diff(x**2,x)',
                                  '(a/(b+1)/c)+1/(d+1)',
-                                 'sqrt(2)'
+                                 'sqrt(2)',
+                                 '2-2',
+                                 'x-x',
                                 ]
         naturalLanguageSentences=['What is the birth date of the president of the United States?',
                                   'What is the birth date of George Washington?',
                                   'Who is the director of \"Pulp Fiction\"?',
                                   'Who is the president of France?',
                                   'What is the capital of Australia?',
-                                  'Who is the author of \"Foundation\"?'
+                                  'Who is the author of \"Foundation\"?',
+                                  'Who wrote Nineteen Eighty-Four?',
                                  ]
         for e in mathematicalExpressions:
             self.assertTrue(isMath(e))
