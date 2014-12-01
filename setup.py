@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='ppp_cas',
-    version='0.3',
+    version='0.3.1',
     description='CAS plugin for PPP',
     url='https://github.com/ProjetPP',
     author='Projet Pensées Profondes',
@@ -24,7 +24,7 @@ setup(
         'Topic :: Software Development :: Libraries',
     ],
     install_requires=[
-        'ppp_datamodel>=0.5',
+        'ppp_datamodel>=0.5.10',
         'ppp_libmodule>=0.7,<0.8',
     ],
     packages=[
