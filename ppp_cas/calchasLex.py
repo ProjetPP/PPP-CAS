@@ -35,7 +35,7 @@ def t_NUMBER(t):
     return t
     
 def t_ID(t):
-    r'[a-zA-Z][a-zA-Z0-9]*'
+    r'[a-zA-Z_][a-zA-Z0-9_]*'
     return t
 
 def t_newline(t):

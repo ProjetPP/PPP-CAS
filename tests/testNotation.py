@@ -332,9 +332,9 @@ class TestSympy(TestCase):
                                     'What is the speed of light ?',
                                     'Who won Roland-Garros this year?',
                                     'Did Djokovic win Roland-Garros?',
-                                    'Is p=np an open problem ?',
-                                    'What is the birthdate of Rene Descartes ?',
-                                    'What is the Ecole Normale Supérieure ?',
+                                    'Is p=np an open problem?',
+                                    'What is the birthdate of Rene Descartes?',
+                                    'What is the Ecole Normale Supérieure?',
                                     'What is the birth date of the first United States president?',
                                     'When is the national day of China?',
                                     'What is the capital of Liechtenstein?',
@@ -347,10 +347,13 @@ class TestSympy(TestCase):
                                     'who is the richest man in the world',
                                     'what is the difference between white eggs and brown eggs',
                                     'can you drink milk after the expiration date',
+                                    'Antoine de Saint-Exupéry',
+                                    #'Author of bli-bla',
                                    ]
         for e in mathematicalExpressions:
             self.assertTrue(isMath(e))
         for e in naturalLanguageSentences:
+            #print(e)
             self.assertFalse(isMath(e))
             
     def testTraceContainsSpellChecker(self):

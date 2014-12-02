@@ -154,6 +154,10 @@ class TestEvaluation(TestCase):
                      ('limit(tan(x), x, Pi/2)', '-\\infty'),
                      ('LimitR(tan(x), x, Pi/2)', '-\\infty'),
                      ('Liml(tan(x), x, 1/2*Pi)', '\\infty'),
+                     ('sin(x)^2+cos(x)^2=1', '\\mathrm{True}'),
+                     ('3=4', '\\mathrm{False}'),
+                     ('2=2', '\\mathrm{True}'),
+                     ('x=y', 'x - y = 0'),
                     ]
         self.procedure(testCases)
 

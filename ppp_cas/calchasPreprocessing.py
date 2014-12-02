@@ -1,5 +1,6 @@
 from ppp_cas.calchasLex import calchasLexer
 from ppp_cas.calchasYacc import calchasParser
+from .calchasTree import Eq
     
 def preprocessImplicitMultiplication(formula):
     calchasLexer.input(formula)
@@ -9,7 +10,7 @@ def preprocessImplicitMultiplication(formula):
         tok = calchasLexer.token()
         if not tok:
             break
-        if (previous.type == 'RPAREN' and tok.type == 'LPAREN') or(previous.type == 'RPAREN' and tok.type == 'ID') or (previous.type == 'NUMBER' and tok.type == 'LPAREN') or (previous.type in ['ID', 'NUMBER'] and tok.type in ['ID', 'NUMBER']):
+        if (previous.type == 'RPAREN' and tok.type == 'LPAREN') or(previous.type == 'RPAREN' and tok.type in ['ID', 'NUMBER']) or (previous.type == 'NUMBER' and tok.type == 'LPAREN') or (previous.type in ['ID', 'NUMBER'] and tok.type in ['ID', 'NUMBER']):
             output = output + '*'
         output = output + tok.value
         previous = tok
@@ -23,4 +24,6 @@ def calchasToSympy(formula):
     if val == None:
         return None
     else:
+        if type(val) == Eq:
+            return 'Eq(' + val.toSympy() + ',0)'
         return val.toSympy()
