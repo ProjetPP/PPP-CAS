@@ -8,7 +8,7 @@ from sympy import count_ops, latex
 from sympy.parsing.sympy_parser import parse_expr
 
 from .evaluator import evaluate
-from .notation import relevance, isMath, traceContainsSpellChecker
+from .notation import relevance, isMath, traceContainsSpellChecker, isInteresting
 
 class RequestHandler:
     def __init__(self, request):
@@ -21,10 +21,14 @@ class RequestHandler:
         if not isinstance(self.tree, Sentence):
             return []
 
-        if not isMath(self.tree.value) or traceContainsSpellChecker(self.trace):
+        mathNotation = isMath(self.tree.value) 
+        if mathNotation == 0 or traceContainsSpellChecker(self.trace):
             return []
 
         outputFormula=evaluate(self.tree.value)
+        if not isInteresting(str(self.tree.value), str(outputFormula)) and mathNotation == 1:
+            return []
+            
         outputTree=MathLatexResource(str(outputFormula), latex=latex(outputFormula), value_type='math-latex')
         measures = {
             'accuracy': 1,

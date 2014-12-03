@@ -1,6 +1,7 @@
 from ppp_cas.notation import isMath, traceContainsSpellChecker
 from unittest import TestCase
-from ppp_datamodel import Sentence, Resource
+from ppp_datamodel.nodes.resource import Resource, MathLatexResource
+from ppp_datamodel.nodes.sentence import Sentence
 from ppp_datamodel.communication import TraceItem
 
 class TestSympy(TestCase):
@@ -175,10 +176,9 @@ class TestSympy(TestCase):
                                     'How many passengers does it serve annually?',
                                     'How many employees does it have?',
                                     'Who is the president or chief executive of Amtrak?',
-                                    'Name cities that have an Amtrak terminal.',
                                     'When did Jack Welch become chairman of General Electric?',
                                     'How many years was he with GE?',
-                                    'When did he retire from GE?', 
+                                    'When did he retire from GE?',
                                     'How many people did he fire from GE?',
                                     'In what country did this movement take place?',
                                     'When did the Khmer Rouge come into power?',
@@ -195,7 +195,6 @@ class TestSympy(TestCase):
                                     'What are the different types of quarks?',
                                     'What kind of music does the band play?',
                                     'In what year was their first major album recorded?',
-                                    'Name their songs.',
                                     'When was Nimitz born?',
                                     'What town was he native of?',
                                     'What branch of the military did he serve in?',
@@ -346,20 +345,18 @@ class TestSympy(TestCase):
                                     'where can i find pictures of hairstyles ',
                                     'who is the richest man in the world',
                                     'what is the difference between white eggs and brown eggs',
-                                    'can you drink milk after the expiration date',
                                     'Antoine de Saint-Exupéry',
-                                    #'Author of bli-bla',
+                                    'Author of bli-bla',
                                    ]
         for e in mathematicalExpressions:
             self.assertTrue(isMath(e))
         for e in naturalLanguageSentences:
-            #print(e)
             self.assertFalse(isMath(e))
-            
+
     def testTraceContainsSpellChecker(self):
-        tracesWithoutSpellChecker=[[TraceItem('CAS', Resource('42', value_type='math-latex'), {'accuracy': 0, 'relevance': 0})],
-                                   [TraceItem('CAS', Resource('42', value_type='math-latex'), {'accuracy': 0, 'relevance': 0}), TraceItem('input', Sentence('sqrt(2)'), {'accuracy': 0, 'relevance': 0})],
-                                   [TraceItem('input', Sentence('sqrt(2)'), {'accuracy': 0, 'relevance': 0}), TraceItem('CAS', Resource('42', value_type='math-latex'), {'accuracy': 0, 'relevance': 0})],
+        tracesWithoutSpellChecker=[[TraceItem('CAS', MathLatexResource('42', value_type='math-latex'), {'accuracy': 0, 'relevance': 0})],
+                                   [TraceItem('CAS', MathLatexResource('42', value_type='math-latex'), {'accuracy': 0, 'relevance': 0}), TraceItem('input', Sentence('sqrt(2)'), {'accuracy': 0, 'relevance': 0})],
+                                   [TraceItem('input', Sentence('sqrt(2)'), {'accuracy': 0, 'relevance': 0}), TraceItem('CAS', MathLatexResource('42', value_type='math-latex'), {'accuracy': 0, 'relevance': 0})],
                                   ]
         tracesWithSpellChecker=[[TraceItem('spell-checker', Sentence('sqrt(2)'),  {'accuracy': 0, 'relevance': 0})],
                                 [TraceItem('input', Sentence('sqrt(2)'), {'accuracy': 0, 'relevance': 0}), TraceItem('spell-checker', Sentence('sq rt 2'), {'accuracy': 0, 'relevance': 0})],
