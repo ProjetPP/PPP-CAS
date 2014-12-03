@@ -1,6 +1,7 @@
 """Request handler of the module."""
 
-from ppp_datamodel import Sentence, Resource
+from ppp_datamodel import Sentence
+from ppp_datamodel.nodes.resource import MathLatexResource
 from ppp_datamodel.communication import TraceItem, Response, Request
 from ppp_libmodule.exceptions import ClientError
 from sympy import count_ops, latex
@@ -24,7 +25,7 @@ class RequestHandler:
             return []
 
         outputFormula=evaluate(self.tree.value)
-        outputTree=Resource(latex(outputFormula), value_type='math-latex')
+        outputTree=MathLatexResource(str(outputFormula), latex=latex(outputFormula), value_type='math-latex')
         measures = {
             'accuracy': 1,
             'relevance': relevance(self.tree.value, outputFormula)
