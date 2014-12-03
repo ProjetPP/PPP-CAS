@@ -26,6 +26,7 @@ setup(
     install_requires=[
         'ppp_datamodel>=0.5.10',
         'ppp_libmodule>=0.7,<0.8',
+        'ply',
     ],
     packages=[
         'ppp_cas',
