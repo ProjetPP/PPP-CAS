@@ -6,8 +6,8 @@ class TestSympy(TestCase):
 
     def procedure(self, testCases):
         for (expr, res) in testCases:
-            evaluated = eval_input(expr)
-            self.assertEqual(latex(evaluated), res)
+            string, latex = eval_input(expr)
+            self.assertEqual(latex, res)
 
     def testNumeric(self):
         testCases = [('2/4', '\\frac{1}{2}'),

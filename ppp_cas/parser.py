@@ -11,16 +11,16 @@ class Parser():
         self.expr=expr
 
     def fromCalchas(self):
-        result = calchasToSympy('('+self.expr+')')
+        result = calchasToSympy('(%s)' % self.expr)
         if result:
             self.expr=result
 
     def fromMathematica(self):
-        result = mathematicaParser.parse('('+self.expr+')', lexer=mathematicaLexer)
+        result = mathematicaParser.parse('(%s)' % self.expr, lexer=mathematicaLexer)
         if result:
             self.expr=result.toSympy()
 
     def normalize(self):
         self.fromMathematica()
         self.fromCalchas()
-        return 'simplify('+self.expr+',2)'
+        return 'simplify(%s,2)' % self.expr

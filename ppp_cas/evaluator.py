@@ -22,10 +22,10 @@ def evaluate(s):
     result = None
     parser = Parser(s)
     inputFormula=parser.normalize()
-    evaluated = process(eval_input, inputFormula, timeout=Config().timeout, heap_size=Config().max_heap)
+    expr, latex = process(eval_input, inputFormula, timeout=Config().timeout, heap_size=Config().max_heap)
 
-    return evaluated
-        
+    return expr, latex
+
 def eval_input(s):
     namespace = {}
     exec(PREEXEC, {}, namespace)
@@ -46,4 +46,4 @@ def eval_input(s):
     except Exception as e:
         raise ValueError(str(e))
 
-    return evaluated
+    return str(evaluated), latex(evaluated)

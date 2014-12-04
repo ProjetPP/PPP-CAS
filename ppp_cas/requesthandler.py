@@ -25,14 +25,14 @@ class RequestHandler:
         if mathNotation == 0 or traceContainsSpellChecker(self.trace):
             return []
 
-        outputFormula=evaluate(self.tree.value)
-        if not isInteresting(str(self.tree.value), str(outputFormula)) and mathNotation == 1:
+        outputString, outputLatex=evaluate(self.tree.value)
+        if not isInteresting(str(self.tree.value), outputString) and mathNotation == 1:
             return []
-            
-        outputTree=MathLatexResource(str(outputFormula), latex=latex(outputFormula), value_type='math-latex')
+
+        outputTree=MathLatexResource(outputString, latex=outputLatex)
         measures = {
             'accuracy': 1,
-            'relevance': relevance(self.tree.value, outputFormula)
+            'relevance': relevance(self.tree.value, outputString)
         }
         trace = self.trace + [TraceItem('CAS', outputTree, measures)]
         response = Response(self.language, outputTree, measures, trace)

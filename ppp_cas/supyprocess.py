@@ -1,7 +1,7 @@
 """Processes handling helpers, imported from
 https://github.com/ProgVal/Limnoria/
 """
-
+import queue
 import resource
 import multiprocessing
 

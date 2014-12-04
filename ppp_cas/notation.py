@@ -13,17 +13,17 @@ def isInteresting(inputFormula, outputFormula):
     forbidenChar = list(r' .*')
     for c in forbidenChar:
         inputFormula = inputFormula.replace(c, "")
-    inputFormula = sorted(list(inputFormula))
+    inputFormula = sorted(inputFormula)
     for c in forbidenChar:
         outputFormula = outputFormula.replace(c, "")
-    outputFormula = sorted(list(outputFormula))
+    outputFormula = sorted(outputFormula)
     return inputFormula != outputFormula
 
 def traceContainsSpellChecker(trace):
     return any(e.module == 'spell-checker' for e in trace)
 
-def relevance(inputFormula, outputTree):
-    lenOutput = len(str(outputTree))
+def relevance(inputString, outputString):
+    lenOutput = len(outputString)
     if lenOutput != 0:
-        return len(inputFormula)/lenOutput
+        return len(inputString)/lenOutput
     return 0
