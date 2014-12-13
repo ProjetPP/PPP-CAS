@@ -42,7 +42,7 @@ class TestRequestHandler(TestCase):
         for (expr, naturalExpr, latexExpr) in testCases:
             handler = RequestHandler(Request(0, 'math', Sentence(expr)))
             self.assertEqual(handler.answer()[0].tree, MathLatexResource(naturalExpr, latex=latexExpr))
-            
+
     def testNoMath(self):
         naturalLanguageSentences=[  'What is the birth date of the president of the United States?',
                                     'What is the birth date of George Washington?',
@@ -377,10 +377,11 @@ class TestRequestHandler(TestCase):
                                     'what is the difference between white eggs and brown eggs',
                                     'Antoine de Saint-Exupéry',
                                     'Author of bli-bla',
+                                    'Saint-Exupery',
                                    ]
 
         for expr in naturalLanguageSentences:
             handler = RequestHandler(Request(0, 'math', Sentence(expr)))
             self.assertEqual(len(handler.answer()), 0)
-            
+
         self.assertEqual(len(RequestHandler(Request(0, 'math', Resource(''))).answer()), 0)

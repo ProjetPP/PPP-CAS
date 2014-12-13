@@ -10,7 +10,7 @@ def isMath(formula):
     return 1
 
 def isInteresting(inputFormula, outputFormula):
-    forbidenChar = list(r' .*')
+    forbidenChar = list(r' .*+')
     for c in forbidenChar:
         inputFormula = inputFormula.replace(c, "")
     inputFormula = sorted(inputFormula)
