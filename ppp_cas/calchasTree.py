@@ -110,7 +110,7 @@ class FunctionCall:
             return self.translate(self.function.toSympy(), self.args)
 
     def translate(self, function, args):
-        mathematicaToSympy={r'^[aA]bs$' : (lambda a: 'Abs('+a.toSympy()+')'),
+        calchasToSympy  =  {r'^[aA]bs$' : (lambda a: 'Abs('+a.toSympy()+')'),
                             r'^[mM]od$' : (lambda a: 'Abs('+a.toSympy()+')'),
                             r'^[sS]ig(n)?$' : (lambda a: 'sign('+a.toSympy()+')'),
                             r'^[sS]gn$' : (lambda a: 'sign('+a.toSympy()+')'),
@@ -177,9 +177,9 @@ class FunctionCall:
                             r'^[lL]im(it)?[rR]$' : (lambda a: 'limit('+a.toSympy()+',dir=\'+\')'),
                            }
 
-        for pattern in mathematicaToSympy.keys():
+        for pattern in calchasToSympy.keys():
             if re.match(pattern, function):
-                return '('+mathematicaToSympy[pattern](args)+')'
+                return '('+calchasToSympy[pattern](args)+')'
         return '('+function+'('+ self.args.toSympy() +')'+')'
 
 class Id:
@@ -195,7 +195,7 @@ class Id:
     def translateId(self, name):
         if type(name) == int:
             return str(name)
-        mathematicaToSympy={r'^[iI]nfinity$' : 'oo',
+        calchasToSympy  =  {r'^[iI]nfinity$' : 'oo',
                             r'^[iI]nfty$' : 'oo',
                             r'^I$' : 'I',
                             r'^[pP]i$' : 'pi',
@@ -203,7 +203,7 @@ class Id:
                             r'^([eE]uler[gG]amma|gamma)$' : 'EulerGamma',
                             r'^[eE]$' : 'E',
                            }
-        for pattern in mathematicaToSympy.keys():
+        for pattern in calchasToSympy.keys():
             if re.match(pattern, name):
-                return mathematicaToSympy[pattern]
+                return calchasToSympy[pattern]
         return str(name)
