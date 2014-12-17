@@ -15,6 +15,7 @@ tokens = (
     'DTIMES',
     'MOD',
     'EQ',
+    'APOSTROPHE',
 )
 
 t_DTIMES     = r'\*\*'
@@ -29,6 +30,7 @@ t_EXCL       = r'!'
 t_POW        = r'\^'
 t_MOD        = r'%'
 t_EQ         = r'='
+t_APOSTROPHE = r'\''
 
 def t_NUMBER(t):
     r'([0-9]*\.[0-9]+|[0-9]+)'

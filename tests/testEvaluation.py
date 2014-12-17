@@ -158,7 +158,11 @@ class TestEvaluation(TestCase):
                      ('3=4', '\\mathrm{False}'),
                      ('2=2', '\\mathrm{True}'),
                      ('x=y', 'x - y = 0'),
-                     ('2f(x)b', '2 b f{\\left (x \\right )}')
+                     ('2f(x)b', '2 b f{\\left (x \\right )}'),
+                     ("sin'''(x)","- \\cos{\\left (x \\right )}"),
+                     ("log''(x)","- \\frac{1}{x^{2}}"),
+                     ("abs'(x)","\\frac{1}{\\left\\lvert{x}\\right\\rvert} \\left(\\Re{x} \\frac{d}{d x} \\Re{x} + \\Im{x} \\frac{d}{d x} \\Im{x}\\right)"),
+                     ("sqrt'(x)","\\frac{1}{2 \\sqrt{x}}"),
                     ]
         self.procedure(testCases)
 

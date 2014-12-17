@@ -59,6 +59,8 @@ class TestCalchas(TestCase):
                   ('''Limit(Sin(x)/x, x, 0)''', FunctionCall(Id('Limit'),List([Divide(FunctionCall(Id('Sin'),List([Id('x')])),Id('x')), Id('x'), Id('0')]))),
                   ('''Limit((1+x/n)^n, x, Infinity)''', FunctionCall(Id('Limit'),List([Pow(Plus(Id('1'),Divide(Id('x'),Id('n'))),Id('n')), Id('x'), Id('Infinity')]))),
                   ('''Pow(1024,1/2)''', FunctionCall(Id('Pow'),List([Id('1024'), Divide(Id('1'),Id('2'))]))),
+                  ('''cos\'(x)''', FunctionCall(Id('diff'),List([FunctionCall(Id('cos'),List([Id('x')])), Id('x'), Id('1')]))),
+                  ("cos''''''''''''''''''''''''''''''''''''''''''(x)", FunctionCall(Id('diff'),List([FunctionCall(Id('cos'),List([Id('x')])), Id('x'), Id('42')]))),
                   ]
         for (expr, res) in testList:
             self.assertEqual(str(calchasParser.parse(expr, lexer=calchasLexer)), str(res))
@@ -110,7 +112,9 @@ class TestCalchas(TestCase):
                   (Plus(Id('b'), Fact(Id('a'))), '''(b+(gamma(a+1)))'''),
                   (Divide(Pow(Id('x'),Id('n')),Fact(Id('n'))), '''((x**n)/(gamma(n+1)))'''),
                   (FunctionCall(Id('Solve'),List([Eq(Pow(Id('x'),Id('2')),Id('1')), Id('x')])), '''(solve([((x**2)-1)],[x]))'''),
-                  (FunctionCall(Id('Pow'),List([Id('1024'), Divide(Id('1'),Id('2'))])), '''(Pow(1024, (1/2)))''')
+                  (FunctionCall(Id('Pow'),List([Id('1024'), Divide(Id('1'),Id('2'))])), '''(Pow(1024, (1/2)))'''),
+                  (FunctionCall(Id('diff'), List([FunctionCall(Id('cos'),List([Id('x')])), Id('x'), Id('1')])), '''(diff((cos(x)), x, 1))'''),
+                  (FunctionCall(Id('diff'), List([FunctionCall(Id('cos'),List([Id('x')])), Id('x'), Id('42')])), '''(diff((cos(x)), x, 42))'''),
                   ]
         for (expr, res) in testList:
             self.assertEqual(expr.toSympy(), res)

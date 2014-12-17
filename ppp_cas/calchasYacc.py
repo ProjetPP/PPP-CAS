@@ -68,6 +68,18 @@ def p_function_call_arg(p):
     '''expression : ID LPAREN expression_list RPAREN'''
     p[0] = FunctionCall(Id(p[1]), p[3])
 
+def p_function_call_arg_diff(p):
+    '''expression : ID list_apostrophe LPAREN expression_list RPAREN'''
+    p[0] = FunctionCall(Id('diff'), List([FunctionCall(Id(p[1]), p[4]), p[4][0], Id(p[2])]))
+
+def p_list_apostrophe_end(p):
+    '''list_apostrophe : APOSTROPHE'''
+    p[0]=1
+
+def p_list_apostrophe(p):
+    '''list_apostrophe : APOSTROPHE list_apostrophe'''
+    p[0]=p[2]+1
+
 def p_function_call_empty(p):
     '''expression : ID LPAREN RPAREN'''
     p[0] = FunctionCall(Id(p[1]), List([]))
