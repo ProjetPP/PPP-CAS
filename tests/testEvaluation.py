@@ -173,6 +173,7 @@ class TestEvaluation(TestCase):
                      ("\\sum_{i=1}^\\infty (1/i^{2})", "\\frac{\\pi^{2}}{6}"),
                      ("\\sum_{i=1}^\\infty (1/pow(i,2))", "\\frac{\\pi^{2}}{6}"),
                      ("\\binom{6}{4}", "15"),
+                     ("\\sqrt{x^2}", "\\sqrt{x^{2}}"),
                     ]
         self.procedure(testCases)
 
