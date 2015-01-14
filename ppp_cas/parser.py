@@ -4,6 +4,8 @@
 from .mathematicaYacc import mathematicaParser
 from .mathematicaLex import mathematicaLexer
 from .calchasPreprocessing import calchasToSympy
+from .latexPreprocessing import isLatex
+from .latexYacc import latexToCalchas
 from re import match, sub
 
 class Parser():
@@ -20,7 +22,14 @@ class Parser():
         if result:
             self.expr=result.toSympy()
 
+    def fromLatex(self):
+        if isLatex(self.expr):
+            result = latexToCalchas('(%s)' % self.expr)
+            if result:
+                self.expr=result
+
     def normalize(self):
+        self.fromLatex()
         self.fromMathematica()
         self.fromCalchas()
         return 'simplify(%s,2)' % self.expr

@@ -84,7 +84,7 @@ class TestEvaluation(TestCase):
                      ]
         self.procedure(testCases)
 
-    def testCalchasLanguage(self):
+    def testCalchas(self):
         testCases = [('3^3', '27'),
                      ('4**4', '256'),
                      ('12%5', '2'),
@@ -163,6 +163,16 @@ class TestEvaluation(TestCase):
                      ("log''(x)","- \\frac{1}{x^{2}}"),
                      ("abs'(x)","\\frac{1}{\\left\\lvert{x}\\right\\rvert} \\left(\\Re{x} \\frac{d}{d x} \\Re{x} + \\Im{x} \\frac{d}{d x} \\Im{x}\\right)"),
                      ("sqrt'(x)","\\frac{1}{2 \\sqrt{x}}"),
+                    ]
+        self.procedure(testCases)
+
+    def testLatex(self):
+        testCases = [("\\sqrt{9}", "3"),
+                     ("\\frac{42}{1337}", "\\frac{6}{191}"),
+                     ("\\sqrt[3]{27}", "3"),
+                     ("\\sum_{i=1}^\\infty (1/i^{2})", "\\frac{\\pi^{2}}{6}"),
+                     ("\\sum_{i=1}^\\infty (1/pow(i,2))", "\\frac{\\pi^{2}}{6}"),
+                     ("\\binom{6}{4}", "15"),
                     ]
         self.procedure(testCases)
 
