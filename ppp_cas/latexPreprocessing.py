@@ -62,8 +62,7 @@ def t_error(t):
 
 latexPreLexer = lex.lex()
     
-LETTERATOM = ['LETTER', 'ATOM', 'NUMBER']
-UPDOWN = ['UP', 'DOWN', 'ATOM']
+UPDOWNATOM = ['UP', 'DOWN', 'ATOM']
 MEANINGLESS = ['\\limits', '\\left', '\\right']
 
 def preprocessImplicitBraces(formula):
@@ -78,11 +77,9 @@ def preprocessImplicitBraces(formula):
         if not tok:
             break
         if not tok.value in MEANINGLESS:
-            if previous.type in UPDOWN and tok.type == 'ID':
+            if previous.type in UPDOWNATOM and tok.type == 'ID':
                 output =  output + '{%s}%s ' % (tok.value[0], tok.value[1:])
-            elif previous.type in UPDOWN and tok.type == 'NUMBER':
-                output =  output + '{%s} ' % (tok.value)
-            elif previous.type in UPDOWN and tok.type == 'ATOM':
+            elif previous.type in UPDOWNATOM and tok.type in ['NUMBER', 'ATOM']:
                 output =  output + '{%s} ' % tok.value
             else:
                 output = output + '%s ' % tok.value
