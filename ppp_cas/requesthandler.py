@@ -25,7 +25,11 @@ class RequestHandler:
         if mathNotation == 0 or traceContainsSpellChecker(self.trace):
             return []
 
-        outputString, outputLatex=evaluate(self.tree.value)
+        try:
+            outputString, outputLatex=evaluate(self.tree.value)
+        except ValueError:
+            return[]
+
         if not isInteresting(str(self.tree.value), outputString) and mathNotation == 1:
             return []
 

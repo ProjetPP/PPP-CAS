@@ -12,6 +12,13 @@ class TestRequestHandler(TestCase):
         for expr in testCases:
             handler = RequestHandler(Request(0, 'math', Sentence(expr)))
             self.assertEqual(len(handler.answer()), 0)
+            
+    def testError(self):
+        testCases = [('D(cos)'),
+                    ]
+        for expr in testCases:
+            handler = RequestHandler(Request(0, 'math', Sentence(expr)))
+            self.assertEqual(len(handler.answer()), 0)
 
     def testMath(self):
         testCases=['5+7',
@@ -38,6 +45,7 @@ class TestRequestHandler(TestCase):
                    ('lcm(n,m)hcf(n,m)', 'm*n', 'm n'),
                    ('integrate(exp(-x**2), x, -infty, infty)', 'sqrt(pi)', '\\sqrt{\\pi}'),
                    ('sqrt(2)', 'sqrt(2)', '\\sqrt{2}'),
+                   ('Integrate[Sin[x*y], {x, 0, 1}, {y, 0, x}]', '-Ci(1)/2 + EulerGamma/2', '- \\frac{1}{2} \\operatorname{Ci}{\\left (1 \\right )} + \\frac{\\gamma}{2}'),
                   ]
         for (expr, naturalExpr, latexExpr) in testCases:
             handler = RequestHandler(Request(0, 'math', Sentence(expr)))
