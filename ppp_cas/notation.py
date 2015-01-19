@@ -1,11 +1,16 @@
+import re
+
 CARACTERISTIC_SYMBOLS = ['sqrt'] + list(r'*+!\_^[]{}%')
 MAYBE_CARACTERISTIC_SYMBOLS = list(r'-/()0123456789=')
-ANTI_CARACTERISTIC_SYMBOLS = ['Who', 'who', 'What', 'what', 'Where', 'where', 'Which', 'which', 'How', 'how', 'Why', 'why', 'is', 'Is', 'of'] + list(r'?"éàèùÉÀÈÙÇâêîôûäëïöüÂÊÎÔÛÄËÏÖÜ')
+ANTI_CARACTERISTIC_SYMBOLS = ['Who', 'who', 'What', 'what', 'Where', 'where', 'Which', 'which', 'How', 'how', 'Why', 'why', 'is', 'Is', 'of'] + list(r'?"éàèùçÉÀÈÙÇâêîôûäëïöüÂÊÎÔÛÄËÏÖÜ')
+ANTI_CARACTERISTIC_REGEX = ['sum', 'derivative', 'product', 'limit', 'antiderivative', 'integrate', 'approx', 'approximation']
 
 def isMath(formula):
-    if any(e in formula for e in CARACTERISTIC_SYMBOLS):
+    isCaract=any(e in formula for e in CARACTERISTIC_SYMBOLS)
+    isAnti=any(e in formula for e in ANTI_CARACTERISTIC_SYMBOLS) or any(re.search(r'%s\s+[^\(]'%e, formula)!=None for e in ANTI_CARACTERISTIC_REGEX)
+    if isCaract and not isAnti:
         return 2
-    if any(e in formula for e in ANTI_CARACTERISTIC_SYMBOLS):
+    if isAnti:
         return 0
     return 1
 

@@ -6,6 +6,20 @@ from unittest import TestCase
 
 class TestRequestHandler(TestCase):
 
+    def testNaturalMath(self):
+        testCases=['derivative of cos(x)',
+                   'sum of derivative of cos(x)^i',
+                   'sum of derivative of cos(x)^i from 1 to n',
+                   'sum derivative cos(x)^i',
+                   'limit derivative cos(x)^i',
+                   'integrate cos(x)^i',
+                   'antiderivative cos(x)^i',
+                   'approx sqrt(2)',
+                  ]
+        for expr in testCases:
+            handler = RequestHandler(Request(0, 'math', Sentence(expr)))
+            self.assertEqual(len(handler.answer()), 0)
+
     def testMathUnhandlable(self):
         testCases=['2f(x)b',
                   ]
