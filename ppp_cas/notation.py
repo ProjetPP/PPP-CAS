@@ -15,6 +15,8 @@ def isMath(formula):
     return 1
 
 def isInteresting(inputFormula, outputFormula):
+    for match in re.finditer(r"(?P<base>[a-zA-Z]+)\*\*(?P<exp>\d+)", outputFormula):
+        outputFormula = inputFormula.replace('%s**%s'%(match.group("base"),match.group("exp")), match.group("base")*int(match.group("exp")))
     forbidenChar = list(r' .*+')
     for c in forbidenChar:
         inputFormula = inputFormula.replace(c, "")

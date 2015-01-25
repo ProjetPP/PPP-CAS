@@ -400,6 +400,11 @@ class TestRequestHandler(TestCase):
                                     'Antoine de Saint-Exupéry',
                                     'Author of bli-bla',
                                     'Saint-Exupery',
+                                    'Quelle est la capitale de la France',
+                                    'la la la la la la la la la la la la',
+                                    'la la la la la',
+                                    'la le la le la le',
+                                    'la la',
                                    ]
 
         for expr in naturalLanguageSentences:
