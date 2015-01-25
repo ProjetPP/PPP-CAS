@@ -31,7 +31,9 @@ class TestLatexPreprocessing(TestCase):
                   ('''\\sqrt \\sqrt a''', '''\\sqrt {\\sqrt} {a} '''),
                   ('''\\sqrt {\\sqrt a}''', '''\\sqrt { \\sqrt {a} } '''),
                   ('''\\exp ab''', '''\\exp {a}b '''),
-                  ('''\\sum_{i=0}^\\infty(1/i^2)''', '''\sum _ { i = 0 } ^ {\infty} ( 1 / i ^ {2} ) ''')
+                  ('''\\sum_{i=0}^\\infty(1/i^2)''', '''\sum _ { i = 0 } ^ {\infty} ( 1 / i ^ {2} ) '''),
+                  ('''\\frac{\\log(\\frac{1}{2})}{2^2}\\log{\\log{n}}''', '''\\frac { \\log ( \\frac { 1 } { 2 } ) } { 2 ^ {2} } \\log { \\log { n } } '''),
+                  ('''\\log a''', '''\\log {a} '''),
                  ]
         for (expr, res) in testList:
             self.assertEqual(preprocessImplicitBraces(expr), res)

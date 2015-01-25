@@ -128,7 +128,9 @@ def p_expr_op_unary_optionnal(p):
     #print("expr_op_unary_optionnal : "+str(p[0]))
         
 def p_expr_op_unary(p):
-    '''expression : UNARY LBRACE expression_list RBRACE'''
+    '''expression : UNARY LBRACE expression_list RBRACE
+                  | UNARY LPAREN expression_list RPAREN
+                  | UNARY expression'''
     tokenToFunc = {'\\sqrt' : 'sqrt',
                    '\\log' : 'log',
                    '\\exp' : 'exp',
@@ -136,7 +138,10 @@ def p_expr_op_unary(p):
                    '\\sin' : 'sin',
                    '\\tan' : 'tan',
                   }
-    p[0] = '%s(%s)' % (tokenToFunc[p[1]], p[3])
+    if p[2] in ['{','(']:
+        p[0] = '%s(%s)' % (tokenToFunc[p[1]], p[3])
+    else:
+        p[0] = '%s(%s)' % (tokenToFunc[p[1]], p[2])  
     #print("expr_op_unary : "+str(p[0]))
 
 def p_error(p):
