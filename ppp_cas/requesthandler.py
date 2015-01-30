@@ -27,8 +27,8 @@ class RequestHandler:
 
         try:
             outputString, outputLatex=evaluate(self.tree.value)
-        except ValueError:
-            return[]
+        except (ValueError, SyntaxError):
+            return []
 
         if not isInteresting(str(self.tree.value), outputString) and mathNotation == 1:
             return []

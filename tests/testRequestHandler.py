@@ -44,6 +44,8 @@ class TestRequestHandler(TestCase):
                    'lcm(n,m)hcf(n,m)',
                    'integrate(exp(-x**2), x, -infty, infty)',
                    'sqrt(2)',
+                   'isprime(5)',
+                   'prime(5)',
                   ]
         for expr in testCases:
             handler = RequestHandler(Request(0, 'math', Sentence(expr)))

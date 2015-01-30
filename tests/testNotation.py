@@ -23,6 +23,8 @@ class TestSympy(TestCase):
                                  'sqrt(2)',
                                  '2-2',
                                  'x-x',
+                                 'isprime(5)',
+                                 'prime(5)',
                                 ]
         naturalLanguageSentences=[  'What is the birth date of the president of the United States?',
                                     'What is the birth date of George Washington?',

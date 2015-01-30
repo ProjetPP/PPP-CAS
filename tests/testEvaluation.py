@@ -75,7 +75,7 @@ class TestEvaluation(TestCase):
                      ('Abs[-Pi]', '\\pi'),
                      ('Floor[-Pi]', '-4'),
                      ('Ceiling[-Pi]', '-3'),
-                      ('Floor[Pi]', '3'),
+                     ('Floor[Pi]', '3'),
                      ('Ceiling[Pi]', '4'),
                      ('Limit[Sin[x]/x, x->0]', '1'),
                      ('Limit[(1+x/n)^n, n->Infinity]', 'e^{x}'),
@@ -165,6 +165,8 @@ class TestEvaluation(TestCase):
                      ("log''(x)","- \\frac{1}{x^{2}}"),
                      ("abs'(x)","\\frac{1}{\\left\\lvert{x}\\right\\rvert} \\left(\\Re{x} \\frac{d}{d x} \\Re{x} + \\Im{x} \\frac{d}{d x} \\Im{x}\\right)"),
                      ("sqrt'(x)","\\frac{1}{2 \\sqrt{x}}"),
+                     ('isprime(5)','\mathrm{True}'),
+                     ('prime(5)','11'),
                     ]
         self.procedure(testCases)
 
