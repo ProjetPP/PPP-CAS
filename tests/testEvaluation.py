@@ -81,6 +81,8 @@ class TestEvaluation(TestCase):
                      ('Limit[(1+x/n)^n, n->Infinity]', 'e^{x}'),
                      ('Limit[Sum[1/i, {i, 1, n}]- Log[n], n->Infinity]', '\\gamma'),
                      ('Solve[x^2==1, x]', '\\left [ \\left ( -1\\right ), \\quad \\left ( 1\\right )\\right ]'),
+                     ('Expand[(x+1)*(x-1)]', 'x^{2} - 1'),
+                     ('Factor[x^2+x]', 'x \\left(x + 1\\right)'),
                      ]
         self.procedure(testCases)
 

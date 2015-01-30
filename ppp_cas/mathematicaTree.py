@@ -133,6 +133,8 @@ class FunctionCall:
                             'Floor' : (lambda a: 'floor('+a[0].toSympy()+')'),
                             'Limit' : (lambda a: 'limit('+a[0].toSympy() +','+ a[1].toSympy()+')'),
                             'Solve' : (lambda a: 'solve(['+a[0].toSympy() +'],['+ a[1].toSympy()+'])'),
+                            'Expand' : (lambda a: 'expand('+a.toSympy()+')'),
+                            'Factor' : (lambda a: 'factor('+a.toSympy()+')'),
                            }
 
         for name in mathematicaToSympy.keys():
