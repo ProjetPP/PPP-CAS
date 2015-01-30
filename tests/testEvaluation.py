@@ -83,6 +83,8 @@ class TestEvaluation(TestCase):
                      ('Solve[x^2==1, x]', '\\left [ \\left ( -1\\right ), \\quad \\left ( 1\\right )\\right ]'),
                      ('Expand[(x+1)*(x-1)]', 'x^{2} - 1'),
                      ('Factor[x^2+x]', 'x \\left(x + 1\\right)'),
+                     ('Prime[5]', '11'),
+                     ('PrimeQ[5]', '\\mathrm{True}'),
                      ]
         self.procedure(testCases)
 

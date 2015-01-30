@@ -135,6 +135,8 @@ class FunctionCall:
                             'Solve' : (lambda a: 'solve(['+a[0].toSympy() +'],['+ a[1].toSympy()+'])'),
                             'Expand' : (lambda a: 'expand('+a.toSympy()+')'),
                             'Factor' : (lambda a: 'factor('+a.toSympy()+')'),
+                            'Prime' : (lambda a: 'prime('+a.toSympy()+')'),
+                            'PrimeQ' : (lambda a: 'isprime('+a.toSympy()+')'),
                            }
 
         for name in mathematicaToSympy.keys():
