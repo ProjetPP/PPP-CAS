@@ -21,6 +21,11 @@ class TestSympy(TestCase):
         testCases = [('sqrt(x)**2', 'x'),
                      ('x-x', '0'),
                      ('simplify(sin(x)**2+cos(x)**2)', '1'),
+                     ('simplify(x | ~x)', '\mathrm{True}'),
+                     ('simplify(Or(x, Not(x)))', '\mathrm{True}'),
+                     ('simplify(((x >> y) >> x)>> y)', 'y \\vee \\neg x'),
+                     ('satisfiable(((x >> y) >> x)>> y)', '\\left \\{ x : \\mathrm{False}, \\quad y : \\mathrm{True}\\right \\}'),
+                     ('satisfiable(x & ~ x)', '\mathrm{False}'),
                     ]
         self.procedure(testCases)
 

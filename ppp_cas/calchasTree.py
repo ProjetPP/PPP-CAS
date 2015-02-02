@@ -175,6 +175,9 @@ class FunctionCall:
                             r'^[lL]im(it)?$' : (lambda a: 'limit('+a.toSympy()+')'),
                             r'^[lL]im(it)?[lL]$' : (lambda a: 'limit('+a.toSympy()+',dir=\'-\')'),
                             r'^[lL]im(it)?[rR]$' : (lambda a: 'limit('+a.toSympy()+',dir=\'+\')'),
+                            r'^[nN](ot|eg)$' : (lambda a: 'Not('+a.toSympy()+')'),
+                            r'^[aA]nd$' : (lambda a: 'And('+a.toSympy()+')'),
+                            r'^[oO]r$' : (lambda a: 'Or('+a.toSympy()+')'),
                            }
 
         for pattern in calchasToSympy.keys():

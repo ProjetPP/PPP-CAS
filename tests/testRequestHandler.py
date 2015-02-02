@@ -48,6 +48,7 @@ class TestRequestHandler(TestCase):
                    'prime(5)',
                    'PrimeQ[5]',
                    'Prime[5]',
+                   'x & x & x | x & y',
                   ]
         for expr in testCases:
             handler = RequestHandler(Request(0, 'math', Sentence(expr)))

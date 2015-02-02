@@ -169,6 +169,11 @@ class TestEvaluation(TestCase):
                      ("sqrt'(x)","\\frac{1}{2 \\sqrt{x}}"),
                      ('isprime(5)','\mathrm{True}'),
                      ('prime(5)','11'),
+                     ('x & x & x | x & y','x'),
+                     ('satisfiable(x & x & x | x & y)','\\left \\{ x : \\mathrm{True}, \\quad y : \\mathrm{True}\\right \\}'),
+                     ('satisfiable(x & ~y)','\\left \\{ x : \\mathrm{True}, \\quad y : \\mathrm{False}\\right \\}'),
+                     ('satisfiable(x & ~x)','\\mathrm{False}'),
+                     ('satisfiable(x | ~x)','\\left \\{ x : \\mathrm{False}\\right \\}'),
                     ]
         self.procedure(testCases)
 

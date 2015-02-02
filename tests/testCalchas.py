@@ -61,6 +61,10 @@ class TestCalchas(TestCase):
                   ('''Pow(1024,1/2)''', FunctionCall(Id('Pow'),List([Id('1024'), Divide(Id('1'),Id('2'))]))),
                   ('''cos\'(x)''', FunctionCall(Id('diff'),List([FunctionCall(Id('cos'),List([Id('x')])), Id('x'), Id('1')]))),
                   ("cos''''''''''''''''''''''''''''''''''''''''''(x)", FunctionCall(Id('diff'),List([FunctionCall(Id('cos'),List([Id('x')])), Id('x'), Id('42')]))),
+                  ("x | y", FunctionCall(Id('Or'),List([Id('x'), Id('y')]))),
+                  ("~ y", FunctionCall(Id('Not'),List([Id('y')]))),
+                  ("x & y", FunctionCall(Id('And'),List([Id('x'), Id('y')]))),
+                  ("x | ~z & ~ y", FunctionCall(Id('Or'),List([Id('x'), FunctionCall(Id('And'),List([FunctionCall(Id('Not'),List([Id('z')])), FunctionCall(Id('Not'),List([Id('y')]))]))]))),
                   ]
         for (expr, res) in testList:
             self.assertEqual(str(calchasParser.parse(expr, lexer=calchasLexer)), str(res))
@@ -115,6 +119,10 @@ class TestCalchas(TestCase):
                   (FunctionCall(Id('Pow'),List([Id('1024'), Divide(Id('1'),Id('2'))])), '''(Pow(1024, (1/2)))'''),
                   (FunctionCall(Id('diff'), List([FunctionCall(Id('cos'),List([Id('x')])), Id('x'), Id('1')])), '''(diff((cos(x)), x, 1))'''),
                   (FunctionCall(Id('diff'), List([FunctionCall(Id('cos'),List([Id('x')])), Id('x'), Id('42')])), '''(diff((cos(x)), x, 42))'''),
+                  (FunctionCall(Id('Or'),List([Id('x'), Id('y')])), '(Or(x, y))'),
+                  (FunctionCall(Id('Not'),List([Id('y')])), '(Not(y))'),
+                  (FunctionCall(Id('And'),List([Id('x'), Id('y')])), '(And(x, y))'),
+                  (FunctionCall(Id('Or'),List([Id('x'), FunctionCall(Id('And'),List([FunctionCall(Id('Not'),List([Id('z')])), FunctionCall(Id('Not'),List([Id('y')]))]))])), '(Or(x, (And((Not(z)), (Not(y))))))'),
                   ]
         for (expr, res) in testList:
             self.assertEqual(expr.toSympy(), res)

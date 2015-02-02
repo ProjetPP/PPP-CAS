@@ -7,6 +7,9 @@ precedence = (
     ('nonassoc', 'EQ'),
     ('nonassoc', 'NUMBER'),
     ('nonassoc', 'ID'),
+    ('left', 'OR'),
+    ('left', 'AND'),
+    ('left', 'NOT'),
     ('left', 'PLUS', 'MINUS'),
     ('left', 'TIMES', 'DIVIDE'),
     ('left', 'UMINUS'),
@@ -47,6 +50,18 @@ def p_expression_arith(p):
                     '**' : Pow,
                   }
     p[0] = tokenToNode[p[2]](p[1], p[3])
+
+def p_expression_infix_func(p):
+    '''expression : expression AND expression
+                  | expression OR expression
+                  | NOT expression'''
+    tokenToNode = { '&' : 'And',
+                    '|' : 'Or',
+                  }
+    if p[1] == '~':
+        p[0] = FunctionCall(Id('Not'), List([p[2]]))
+    else:
+        p[0] = FunctionCall(Id(tokenToNode[p[2]]), List([p[1], p[3]]))
 
 def p_expression_fact(p):
     '''expression : expression EXCL'''
