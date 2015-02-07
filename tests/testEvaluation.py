@@ -4,9 +4,12 @@ from sympy import latex
 
 class TestEvaluation(TestCase):
 
-    def procedure(self, testCases):
+    def procedure(self, testCases, p=False):
         for (expr, res) in testCases:
-            string, latex = evaluate(expr)
+            if p:
+                print(expr)
+                print(res)
+            string, latex = evaluate(expr, p=p)
             self.assertEqual(latex, res)
 
     def testNumeric(self):
@@ -115,7 +118,6 @@ class TestEvaluation(TestCase):
                      ('Abs(1)', '1'),
                      ('Abs(-1)', '1'),
                      ('Abs(x)', '\\left\\lvert{x}\\right\\rvert'),
-                     ('mod(-Pi)', '\\pi'),
                      ('Ceiling(-Pi)', '-3'),
                      ('Floor(-Pi)', '-4'),
                      ('ceil(-Pi)', '-3'),
@@ -161,7 +163,7 @@ class TestEvaluation(TestCase):
                      ('sin(x)^2+cos(x)^2=1', '\\mathrm{True}'),
                      ('3=4', '\\mathrm{False}'),
                      ('2=2', '\\mathrm{True}'),
-                     ('x=y', 'x - y = 0'),
+                     ('x=y', 'x = y'),
                      ('2f(x)b', '2 b f{\\left (x \\right )}'),
                      ("sin'''(x)","- \\cos{\\left (x \\right )}"),
                      ("log''(x)","- \\frac{1}{x^{2}}"),
@@ -175,7 +177,7 @@ class TestEvaluation(TestCase):
                      ('satisfiable(x & ~x)','\\mathrm{False}'),
                      ('satisfiable(x | ~x)','\\left \\{ x : \\mathrm{False}\\right \\}'),
                     ]
-        self.procedure(testCases)
+        self.procedure(testCases, p=False)
 
     def testLatex(self):
         testCases = [("\\sqrt{9}", "3"),

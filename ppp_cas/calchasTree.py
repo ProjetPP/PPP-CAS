@@ -1,57 +1,5 @@
 import re
 
-class BinaryOperator:
-    def __init__(self, left, right):
-        self.left = left
-        self.right = right
-
-    def __str__(self):
-        return '%s(%s, %s)' % (self.__class__.__name__, self.left, self.right)
-
-    def toSympy(self, op):
-        return '(%s%s%s)' % (self.left.toSympy(), op, self.right.toSympy())
-
-class Plus(BinaryOperator):
-    def toSympy(self):
-        return super().toSympy('+')
-
-class Divide(BinaryOperator):
-    def toSympy(self):
-        return super().toSympy('/')
-
-class Mod(BinaryOperator):
-    def toSympy(self):
-        return super().toSympy('%')
-
-class Times(BinaryOperator):
-    def toSympy(self):
-        return super().toSympy('*')
-
-class Minus(BinaryOperator):
-    def toSympy(self):
-        return super().toSympy('-')
-
-class Pow(BinaryOperator):
-    def toSympy(self):
-        return super().toSympy('**')
-
-
-
-class UnaryOperator:
-    def __init__(self, val):
-        self.val = val
-
-    def __str__(self):
-        return '%s(%s)' % (self.__class__.__name__, self.val)
-
-class Opp(UnaryOperator):
-    def toSympy(self):
-        return '('+ '-' + self.val.toSympy() +')'
-
-class Fact(UnaryOperator):
-    def toSympy(self):
-        return '(gamma(' + self.val.toSympy() +'+1))'
-
 class List:
     def __init__(self, l):
         self.list = l
@@ -93,10 +41,6 @@ class List:
             return l[0].toSympy()+',('+rightParentheses(l[1:])+')'
         return rightParentheses(self.list)
 
-class Eq(BinaryOperator):
-    def toSympy(self):
-        return super().toSympy('-')
-
 class FunctionCall:
     def __init__(self, function, args):
         self.function = function
@@ -111,7 +55,7 @@ class FunctionCall:
 
     def translate(self, function, args):
         calchasToSympy  =  {r'^[aA]bs$' : (lambda a: 'Abs('+a.toSympy()+')'),
-                            r'^[mM]od$' : (lambda a: 'Abs('+a.toSympy()+')'),
+                            r'^[mM]od$' : (lambda a: 'Mod('+a.toSympy()+')'),
                             r'^[sS]ig(n)?$' : (lambda a: 'sign('+a.toSympy()+')'),
                             r'^[sS]gn$' : (lambda a: 'sign('+a.toSympy()+')'),
                             r'^[sS]ignum$' : (lambda a: 'sign('+a.toSympy()+')'),
@@ -173,8 +117,8 @@ class FunctionCall:
                             r'^[sS]impl(if(y|ication))?$' : (lambda a: 'simplify('+a.toSympy()+')'),
                             r'^[sS]ol(ve|ution(s)?)?$' : (lambda a: 'solve(['+a[0].toSympy() +'],['+ a[1].toSympy()+'])'),
                             r'^[lL]im(it)?$' : (lambda a: 'limit('+a.toSympy()+')'),
-                            r'^[lL]im(it)?[lL]$' : (lambda a: 'limit('+a.toSympy()+',dir=\'-\')'),
-                            r'^[lL]im(it)?[rR]$' : (lambda a: 'limit('+a.toSympy()+',dir=\'+\')'),
+                            r'^[lL]im(it)?[lL](eft)?$' : (lambda a: 'limit('+a.toSympy()+',dir=\'-\')'),
+                            r'^[lL]im(it)?[rR](ight)?$' : (lambda a: 'limit('+a.toSympy()+',dir=\'+\')'),
                             r'^[nN](ot|eg)$' : (lambda a: 'Not('+a.toSympy()+')'),
                             r'^[aA]nd$' : (lambda a: 'And('+a.toSympy()+')'),
                             r'^[oO]r$' : (lambda a: 'Or('+a.toSympy()+')'),
@@ -190,7 +134,7 @@ class Id:
         self.id=id
 
     def __str__(self):
-        return 'Id('+str(self.id)+')'
+        return 'Id(\''+str(self.id)+'\')'
 
     def toSympy(self):
         return self.translateId(self.id)

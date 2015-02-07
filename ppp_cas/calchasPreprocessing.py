@@ -1,6 +1,5 @@
 from ppp_cas.calchasLex import calchasLexer
 from ppp_cas.calchasYacc import calchasParser
-from .calchasTree import Eq
     
 def preprocessImplicitMultiplication(formula):
     calchasLexer.input(formula)
@@ -24,6 +23,4 @@ def calchasToSympy(formula):
     if val == None:
         return None
     else:
-        if type(val) == Eq:
-            return 'Eq(' + val.toSympy() + ',0)'
         return val.toSympy()
