@@ -4,12 +4,9 @@ from sympy import latex
 
 class TestEvaluation(TestCase):
 
-    def procedure(self, testCases, p=False):
+    def procedure(self, testCases):
         for (expr, res) in testCases:
-            if p:
-                print(expr)
-                print(res)
-            string, latex = evaluate(expr, p=p)
+            string, latex = evaluate(expr)
             self.assertEqual(latex, res)
 
     def testNumeric(self):
@@ -177,7 +174,7 @@ class TestEvaluation(TestCase):
                      ('satisfiable(x & ~x)','\\mathrm{False}'),
                      ('satisfiable(x | ~x)','\\left \\{ x : \\mathrm{False}\\right \\}'),
                     ]
-        self.procedure(testCases, p=False)
+        self.procedure(testCases)
 
     def testLatex(self):
         testCases = [("\\sqrt{9}", "3"),

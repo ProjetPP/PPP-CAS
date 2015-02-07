@@ -28,16 +28,8 @@ class Parser():
             if result:
                 self.expr=result
 
-    def normalize(self, p=False):
-        if p:
-            print("Init : "+self.expr)
+    def normalize(self):
         self.fromLatex()
-        if p:
-            print("LaTeX : "+self.expr)
         self.fromMathematica()
-        if p:
-            print("Mathematica : "+self.expr)
         self.fromCalchas()
-        if p:
-            print("Calchas : "+self.expr)
         return 'simplify(%s,2)' % self.expr

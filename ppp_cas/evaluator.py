@@ -18,14 +18,10 @@ import sympy
 from sympy.solvers.diophantine import diophantine
 """
 
-def evaluate(s, p=False):
+def evaluate(s):
     result = None
     parser = Parser(s)
-    if p:
-        print(s)
-    inputFormula=parser.normalize(p=p)
-    if p:
-        print(inputFormula)
+    inputFormula=parser.normalize()
     expr, latex = process(eval_input, inputFormula, timeout=Config().timeout, heap_size=Config().max_heap)
 
     return expr, latex
