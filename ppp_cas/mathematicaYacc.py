@@ -1,6 +1,6 @@
 import ply.yacc as yacc
 from .mathematicaLex import tokens
-from .mathematicaTree import Plus, Minus, Times, Opp, FunctionCall, List, Divide, Diff, Pow, Id, Fact, Arrow, Eq
+from .mathematicaTree import Plus, Minus, Times, Opp, FunctionCall, List, Divide, Diff, Pow, Id, Fact, Arrow
 
 precedence = (
     ('nonassoc', 'ARROW', 'EQ'),
@@ -51,7 +51,7 @@ def p_expression_arrow(p):
     
 def p_expression_eq(p):
     '''expression : expression EQ expression'''
-    p[0] = Eq(p[1], p[3])
+    p[0] = FunctionCall(Id('Eq'),List([p[1], p[3]]))
         
 def p_expression_fact(p):
     '''expression : expression EXCL'''

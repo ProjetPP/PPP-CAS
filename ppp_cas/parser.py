@@ -20,7 +20,7 @@ class Parser():
     def fromMathematica(self):
         result = mathematicaParser.parse('(%s)' % self.expr, lexer=mathematicaLexer)
         if result:
-            self.expr=result.toSympy()
+            self.expr=result.toCalchas()
 
     def fromLatex(self):
         if isLatex(self.expr):
