@@ -1,7 +1,6 @@
 import ply.yacc as yacc
 from .calchasLex import tokens
 from .calchasTree import FunctionCall, List, Id
-from sympy import latex
 
 precedence = (
     ('nonassoc', 'EQ'),

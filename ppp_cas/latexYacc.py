@@ -1,7 +1,6 @@
 import ply.yacc as yacc
 from .latexLex import tokens, latexLexer
 from .latexPreprocessing import preprocessImplicitBraces
-from sympy import latex
 
 precedence=(
     ('left', 'PLUS'),

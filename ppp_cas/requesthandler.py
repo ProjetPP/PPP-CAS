@@ -4,8 +4,6 @@ from ppp_datamodel import Sentence
 from ppp_datamodel.nodes.resource import MathLatexResource
 from ppp_datamodel.communication import TraceItem, Response, Request
 from ppp_libmodule.exceptions import ClientError
-from sympy import count_ops, latex
-from sympy.parsing.sympy_parser import parse_expr
 
 from .evaluator import evaluate
 from .notation import relevance, isMath, traceContainsSpellChecker, isInteresting

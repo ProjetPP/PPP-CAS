@@ -1,7 +1,6 @@
 import ply.yacc as yacc
 from .mathematicaLex import tokens
 from .mathematicaTree import Plus, Minus, Times, Opp, FunctionCall, List, Divide, Diff, Pow, Id, Fact, Arrow, Eq
-from sympy import latex
 
 precedence = (
     ('nonassoc', 'ARROW', 'EQ'),

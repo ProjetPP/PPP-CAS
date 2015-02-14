@@ -4,10 +4,8 @@ import sys
 import queue
 import collections
 
-import sympy
-from sympy.core.function import FunctionClass
-from sympy import latex, series, sympify, solve, Derivative, Integral, Symbol, diff, integrate
-from sympy.parsing.sympy_parser import stringify_expr, eval_expr, standard_transformations, convert_xor, TokenError
+from sympy import latex
+from sympy.parsing.sympy_parser import stringify_expr, eval_expr, standard_transformations
 
 from .parser import Parser
 from .config import Config
