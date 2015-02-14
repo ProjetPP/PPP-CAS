@@ -13,10 +13,7 @@ from .parser import Parser
 from .config import Config
 from .supyprocess import process
 
-PREEXEC = """from sympy import *
-import sympy
-from sympy.solvers.diophantine import diophantine
-"""
+PREEXEC = """from sympy import *"""
 
 def evaluate(s):
     result = None
