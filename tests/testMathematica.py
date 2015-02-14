@@ -1,6 +1,6 @@
 from ppp_cas.mathematicaYacc import mathematicaParser
 from ppp_cas.mathematicaLex import mathematicaLexer
-from ppp_cas.mathematicaTree import Plus, Minus, Times, Opp, FunctionCall, List, Divide, Diff, Pow, Id, Fact, Arrow, Eq
+from ppp_cas.mathematicaTree import Plus, Minus, Times, Opp, FunctionCall, List, Divide, Diff, Pow, Id, Fact, Arrow
 from unittest import TestCase
 
 class TestMathematica(TestCase):
@@ -58,7 +58,7 @@ class TestMathematica(TestCase):
                   ('''Integrate[Sin[x*y], {x, 0, 1}, {y, 0, x}]''', FunctionCall(Id('Integrate'),List([FunctionCall(Id('Sin'),List([Times(Id('x'),Id('y'))])), List([Id('x'), Id('0'), Id('1')]), List([Id('y'), Id('0'), Id('x')])]))),
                   ('''Limit[Sin[x]/x, x->0]''', FunctionCall(Id('Limit'),List([Divide(FunctionCall(Id('Sin'),List([Id('x')])),Id('x')), Arrow(Id('x'), Id('0'))]))),
                   ('''Limit[(1+x/n)^n, x->Infinity]''', FunctionCall(Id('Limit'),List([Pow(Plus(Id('1'),Divide(Id('x'),Id('n'))),Id('n')), Arrow(Id('x'), Id('Infinity'))]))),
-                  ('''Solve[x^2==1, x]''', FunctionCall(Id('Solve'),List([Eq(Pow(Id('x'),Id('2')),Id('1')), Id('x')]))),
+                  ('''Solve[x^2==1, x]''',  FunctionCall(Id('Solve'),List([FunctionCall(Id('Eq'),List([Pow(Id('x'), Id('2')), Id('1')])), Id('x')]))),
                   ('''Sin'[x]''', Diff(FunctionCall(Id('Sin'),List([Id('x')])),1))
                   ]
         for (expr, res) in testList:
@@ -90,11 +90,11 @@ class TestMathematica(TestCase):
                   (List([]), ''''''),
                   (List([Id('a')]), '''a'''),
                   (List([Id('0.42'), Id('85'), FunctionCall(Id('f'),List([Id('g')]))]), '''0.42, 85, (f(g))'''),
-                  (FunctionCall(Id('Sum'),List([Divide(Id('1'),Pow(Id('i'),Id('6'))), List([Id('i'), Id('1'), Id('Infinity')])])), '''(summation((1/(i**6)),(i,(1,oo))))'''),
-                  (FunctionCall(Id('Sum'),List([Divide(Id('j'),Pow(Id('i'),Id('6'))), List([Id('i'), Id('1'), Id('Infinity')]), List([Id('j'), Id('0'), Id('m')])])), '''(summation((j/(i**6)),(i,(1,oo)),(j,(0,m))))'''),
-                  (FunctionCall(Id('Integrate'),List([Divide(Id('1'),Plus(Pow(Id('x'),Id('3')),Id('1'))), Id('x')])), '''(integrate((1/((x**3)+1)),(x)))'''),
-                  (FunctionCall(Id('Integrate'),List([Divide(Id('1'),Plus(Pow(Id('x'),Id('3')),Id('1'))), List([Id('x'), Id('0'), Id('1')])])),'''(integrate((1/((x**3)+1)),(x, 0, 1)))'''),
-                  (FunctionCall(Id('Integrate'),List([FunctionCall(Id('Sin'),List([Times(Id('x'),Id('y'))])), List([Id('x'), Id('0'), Id('1')]), List([Id('y'), Id('0'), Id('x')])])), '''(integrate((sin((x*y))),(y, 0, x),(x, 0, 1)))'''),
+                  (FunctionCall(Id('Sum'),List([Divide(Id('1'),Pow(Id('i'),Id('6'))), List([Id('i'), Id('1'), Id('Infinity')])])), '''(sum((1/(i**6)), i, 1, oo))'''),
+                  (FunctionCall(Id('Sum'),List([Divide(Id('j'),Pow(Id('i'),Id('6'))), List([Id('i'), Id('1'), Id('Infinity')]), List([Id('j'), Id('0'), Id('m')])])), '''(sum(sum((j/(i**6)), i, 1, oo), j, 0, m))'''),
+                  (FunctionCall(Id('Integrate'),List([Divide(Id('1'),Plus(Pow(Id('x'),Id('3')),Id('1'))), Id('x')])), '''(int((1/((x**3)+1)), x))'''),
+                  (FunctionCall(Id('Integrate'),List([Divide(Id('1'),Plus(Pow(Id('x'),Id('3')),Id('1'))), List([Id('x'), Id('0'), Id('1')])])),'''(int((1/((x**3)+1)), x, 0, 1))'''),
+                  (FunctionCall(Id('Integrate'),List([FunctionCall(Id('Sin'),List([Times(Id('x'),Id('y'))])), List([Id('x'), Id('0'), Id('1')]), List([Id('y'), Id('0'), Id('x')])])), '''(int(int((sin((x*y))), y, 0, x), x, 0, 1))'''),
                   (FunctionCall(Id('N'), List([FunctionCall(Id('Sqrt'), List([Id('42')]))])), '''(N((sqrt(42))))''' ),
                   (FunctionCall(Id('N'), List([FunctionCall(Id('Sqrt'), List([Id('42')])), Id('20')])), '''(N((sqrt(42)), 20))''' ),
                   (FunctionCall(Id('D'), List([Id('f'), Id('x')])), '''(diff(f, x))'''),
@@ -109,8 +109,8 @@ class TestMathematica(TestCase):
                   (Divide(Pow(Id('x'),Id('n')),Fact(Id('n'))), '''((x**n)/(n!))'''),
                   (FunctionCall(Id('Limit'),List([Divide(FunctionCall(Id('Sin'),List([Id('x')])),Id('x')), Arrow(Id('x'), Id('0'))])), '''(limit(((sin(x))/x),x,0))'''),
                   (FunctionCall(Id('Limit'),List([Pow(Plus(Id('1'),Divide(Id('x'),Id('n'))),Id('n')), Arrow(Id('x'), Id('Infinity'))])), '''(limit(((1+(x/n))**n),x,oo))'''),
-                  (FunctionCall(Id('Solve'),List([Eq(Pow(Id('x'),Id('2')),Id('1')), Id('x')])), '''(solve([((x**2)-1)],[x]))'''),
+                  (FunctionCall(Id('Solve'),List([FunctionCall(Id('Eq'),List([Pow(Id('x'), Id('2')), Id('1')])), Id('x')])), '''(solve([(Eq((x**2), 1))],[x]))'''),
                   (Diff(FunctionCall(Id('Sin'),List([Id('x')])),1), '''diff((sin(x)),x,1)''')
                   ]
         for (expr, res) in testList:
-            self.assertEqual(expr.toSympy(), res)
+            self.assertEqual(expr.toCalchas(), res)

@@ -6,37 +6,32 @@ class BinaryOperator:
     def __str__(self):
         return '%s(%s, %s)' % (self.__class__.__name__, self.left, self.right)
 
-    def toSympy(self, op):
-        return '(%s%s%s)' % (self.left.toSympy(), op, self.right.toSympy())
+    def toCalchas(self, op):
+        return '(%s%s%s)' % (self.left.toCalchas(), op, self.right.toCalchas())
 
 class Plus(BinaryOperator):
-    def toSympy(self):
-        return super().toSympy('+')
+    def toCalchas(self):
+        return super().toCalchas('+')
 
 class Divide(BinaryOperator):
-    def toSympy(self):
-        return super().toSympy('/')
+    def toCalchas(self):
+        return super().toCalchas('/')
 
 class Times(BinaryOperator):
-    def toSympy(self):
-        return super().toSympy('*')
+    def toCalchas(self):
+        return super().toCalchas('*')
 
 class Minus(BinaryOperator):
-    def toSympy(self):
-        return super().toSympy('-')
+    def toCalchas(self):
+        return super().toCalchas('-')
 
 class Pow(BinaryOperator):
-    def toSympy(self):
-        return super().toSympy('**')
+    def toCalchas(self):
+        return super().toCalchas('**')
 
 class Arrow(BinaryOperator):
-    def toSympy(self):
-        return '%s,%s' % (self.left.toSympy(), self.right.toSympy())
-
-class Eq(BinaryOperator):
-    def toSympy(self):
-        return super().toSympy('-')
-
+    def toCalchas(self):
+        return '%s,%s' % (self.left.toCalchas(), self.right.toCalchas())
 
 
 class UnaryOperator:
@@ -47,12 +42,12 @@ class UnaryOperator:
         return '%s(%s)' % (self.__class__.__name__, self.val)
 
 class Opp(UnaryOperator):
-    def toSympy(self):
-        return '('+ '-' + self.val.toSympy() +')'
+    def toCalchas(self):
+        return '('+ '-' + self.val.toCalchas() +')'
 
 class Fact(UnaryOperator):
-    def toSympy(self):
-        return '(' + self.val.toSympy() +'!)'
+    def toCalchas(self):
+        return '(' + self.val.toCalchas() +'!)'
 
 class Diff:
     def __init__(self, val, nb):
@@ -62,8 +57,8 @@ class Diff:
     def __str__(self):
         return 'Diff('+str(self.val)+','+str(self.nb)+')'
 
-    def toSympy(self):
-        return 'diff('+self.val.toSympy()+','+self.val.args[0].toSympy()+','+str(self.nb)+')'
+    def toCalchas(self):
+        return 'diff('+self.val.toCalchas()+','+self.val.args[0].toCalchas()+','+str(self.nb)+')'
 
 class List:
     def __init__(self, l):
@@ -89,12 +84,12 @@ class List:
     def getList(self):
         return self.list
 
-    def toSympy(self):
+    def toCalchas(self):
         if len(self.list)==0:
             return ''
-        s = self.list[0].toSympy()
+        s = self.list[0].toCalchas()
         for e in self.list[1:]:
-            s = s + ', ' + e.toSympy()
+            s = s + ', ' + e.toCalchas()
         return s
 
 class FunctionCall:
@@ -105,63 +100,72 @@ class FunctionCall:
     def __str__(self):
         return 'FunctionCall('+str(self.function)+','+str(self.args)+')'
 
-    def toSympy(self):
+    def toCalchas(self):
         if type(self.function)==Id:
-            return self.translate(self.function.toSympy(), self.args)
+            return self.translate(self.function.toCalchas(), self.args)
 
     def translate(self, function, args):
-        mathematicaToSympy={'Sqrt' : (lambda a: 'sqrt('+a[0].toSympy()+')'),
-                            'Sin' : (lambda a: 'sin('+a[0].toSympy()+')'),
-                            'Cos' : (lambda a: 'cos('+a[0].toSympy()+')'),
-                            'Tan' : (lambda a: 'tan('+a[0].toSympy()+')'),
-                            'Arccos' : (lambda a: 'acos('+a[0].toSympy()+')'),
-                            'Arcsin' : (lambda a: 'asin('+a[0].toSympy()+')'),
-                            'Arctan' : (lambda a: 'atan('+a[0].toSympy()+')'),
-                            'Sum' : (lambda a: 'summation('+a[0].toSympy()+''.join(([(lambda l:',('+l[0].toSympy()+',('+ l[1].toSympy() +','+ l[2].toSympy() +'))')(l) for l in a[1:]]))+')'),
-                            'Integrate' : (lambda a: 'integrate('+a[0].toSympy()+''.join(list(reversed([(lambda l:',('+l.toSympy()+')')(l) for l in a[1:]])))+')'),
-                            'N' : (lambda a: 'N('+a.toSympy()+')'),
-                            'D' : (lambda a: 'diff('+a[0].toSympy()+', '+', '.join([l.toSympy() for l in a[1:]])+')'),
-                            'Exp' : (lambda a: 'exp('+a.toSympy()+')'),
-                            'Simplify' : (lambda a: 'simplify('+a.toSympy()+')'),
-                            'Power' : (lambda a: 'Pow('+a.toSympy()+')'),
-                            'Log' : (lambda a: 'log('+List(list(reversed(a.getList()))).toSympy()+')'),
-                            'Log10' : (lambda a: '(log('+a[0].toSympy()+'))/(log(10))'),
-                            'Log2' : (lambda a: '(log('+a[0].toSympy()+'))/(log(2))'),
-                            'Factorial' : (lambda a: '('+a[0].toSympy()+'!)'),
-                            'Abs' : (lambda a: 'Abs('+a[0].toSympy()+')'),
-                            'Ceiling' : (lambda a: 'ceiling('+a[0].toSympy()+')'),
-                            'Floor' : (lambda a: 'floor('+a[0].toSympy()+')'),
-                            'Limit' : (lambda a: 'limit('+a[0].toSympy() +','+ a[1].toSympy()+')'),
-                            'Solve' : (lambda a: 'solve(['+a[0].toSympy() +'],['+ a[1].toSympy()+'])'),
-                            'Expand' : (lambda a: 'expand('+a.toSympy()+')'),
-                            'Factor' : (lambda a: 'factor('+a.toSympy()+')'),
-                            'Prime' : (lambda a: 'prime('+a.toSympy()+')'),
-                            'PrimeQ' : (lambda a: 'isprime('+a.toSympy()+')'),
+        def bigoppTranslation(functionName, args):
+            if len(args)==0:
+                return ''
+            if len(args)==1:
+                return args[0].toCalchas()
+            if isinstance(args[-1], List):
+                return '%s(%s, %s, %s, %s)'%(functionName, bigoppTranslation(functionName, args[0:-1]),args[-1][0].toCalchas(),args[-1][1].toCalchas(),args[-1][2].toCalchas())
+            return '%s(%s, %s)'%(functionName, bigoppTranslation(functionName, args[0:-1]),args[-1].toCalchas())
+            
+        mathematicatoCalchas={'Sqrt' : (lambda a: 'sqrt('+a[0].toCalchas()+')'),
+                            'Sin' : (lambda a: 'sin('+a[0].toCalchas()+')'),
+                            'Cos' : (lambda a: 'cos('+a[0].toCalchas()+')'),
+                            'Tan' : (lambda a: 'tan('+a[0].toCalchas()+')'),
+                            'Arccos' : (lambda a: 'acos('+a[0].toCalchas()+')'),
+                            'Arcsin' : (lambda a: 'asin('+a[0].toCalchas()+')'),
+                            'Arctan' : (lambda a: 'atan('+a[0].toCalchas()+')'),
+                            'Sum' : (lambda a: bigoppTranslation("sum", a)),
+                            'Integrate' : (lambda a: bigoppTranslation("int", [a[0]]+list(reversed(a[1:])))),
+                            'N' : (lambda a: 'N('+a.toCalchas()+')'),
+                            'D' : (lambda a: 'diff('+a[0].toCalchas()+', '+', '.join([l.toCalchas() for l in a[1:]])+')'),
+                            'Exp' : (lambda a: 'exp('+a.toCalchas()+')'),
+                            'Simplify' : (lambda a: 'simplify('+a.toCalchas()+')'),
+                            'Power' : (lambda a: 'Pow('+a.toCalchas()+')'),
+                            'Log' : (lambda a: 'log('+List(list(reversed(a.getList()))).toCalchas()+')'),
+                            'Log10' : (lambda a: 'lg('+a[0].toCalchas()+')'),
+                            'Log2' : (lambda a: 'lb('+a[0].toCalchas()+')'),
+                            'Factorial' : (lambda a: '('+a[0].toCalchas()+'!)'),
+                            'Abs' : (lambda a: 'Abs('+a[0].toCalchas()+')'),
+                            'Ceiling' : (lambda a: 'ceiling('+a[0].toCalchas()+')'),
+                            'Floor' : (lambda a: 'floor('+a[0].toCalchas()+')'),
+                            'Limit' : (lambda a: 'limit('+a[0].toCalchas() +','+ a[1].toCalchas()+')'),
+                            'Solve' : (lambda a: 'solve(['+a[0].toCalchas() +'],['+ a[1].toCalchas()+'])'),
+                            'Expand' : (lambda a: 'expand('+a.toCalchas()+')'),
+                            'Factor' : (lambda a: 'factor('+a.toCalchas()+')'),
+                            'Prime' : (lambda a: 'prime('+a.toCalchas()+')'),
+                            'PrimeQ' : (lambda a: 'isprime('+a.toCalchas()+')'),
                            }
 
-        for name in mathematicaToSympy.keys():
+        for name in mathematicatoCalchas.keys():
             if name == function:
-                return '('+mathematicaToSympy[name](args)+')'
+                return '('+mathematicatoCalchas[name](args)+')'
 
-        return '('+function+'('+ self.args.toSympy() +')'+')'
+        return '('+function+'('+ self.args.toCalchas() +')'+')'
 
 class Id:
     def __init__(self, id):
         self.id=id
 
     def __str__(self):
-        return 'Id('+str(self.id)+')'
+        return 'Id(\''+str(self.id)+'\')'
 
-    def toSympy(self):
+    def toCalchas(self):
         return self.translateId(self.id)
 
     def translateId(self, id):
-        mathematicaToSympy={'Infinity' : 'oo',
+        mathematicatoCalchas={'Infinity' : 'oo',
                             'I' : 'I',
                             'Pi' : 'pi',
                             'GoldenRatio' : 'GoldenRatio',
                             'EulerGamma' : 'EulerGamma',
                            }
-        if id in mathematicaToSympy.keys():
-            return mathematicaToSympy[id]
+        if id in mathematicatoCalchas.keys():
+            return mathematicatoCalchas[id]
         return str(id)
