@@ -21,9 +21,6 @@ class List:
     def __len__(self):
         return len(self.list)
 
-    def getList(self):
-        return self.list
-
     def toSympy(self):
         if len(self.list)==0:
             return ''
