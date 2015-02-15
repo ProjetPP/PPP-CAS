@@ -59,6 +59,8 @@ def process(f, *args, **kwargs): # pragma: no cover
         if resource:
             rsrc = resource.RLIMIT_DATA
             resource.setrlimit(rsrc, (heap_size, heap_size))
+            rsrc = resource.RLIMIT_STACK
+            resource.setrlimit(rsrc, (heap_size, heap_size))
         try:
             r = f(*args, **kwargs)
             q.put(r)

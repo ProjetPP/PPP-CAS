@@ -1,4 +1,4 @@
 {
-    "max_heap": 10000000,
+    "max_heap": 10000,
     "timeout": 1000
 }
