@@ -1,6 +1,5 @@
 from ppp_cas.evaluator import eval_input
 from unittest import TestCase
-from sympy import latex
 
 class TestSympy(TestCase):
 

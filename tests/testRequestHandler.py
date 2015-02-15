@@ -28,7 +28,7 @@ class TestRequestHandler(TestCase):
             self.assertEqual(len(handler.answer()), 0)
             
     def testError(self):
-        testCases = [('D(cos)'),
+        testCases = [
                     ]
         for expr in testCases:
             handler = RequestHandler(Request(0, 'math', Sentence(expr)))
@@ -59,8 +59,8 @@ class TestRequestHandler(TestCase):
                    ('2^42', '4398046511104', '4398046511104'),
                    ('sqrt((42)**(pi))', '42**(pi/2)', '42^{\\frac{\pi}{2}}'),
                    ('diff(x**2,x)', '2*x', '2 x'),
-                   ('Solve[x^2==1, x]', '[(-1,), (1,)]', '\left [ \left ( -1\\right ), \quad \left ( 1\\right )\\right ]'),
-                   ('C(3.7,1.3)', '4.43659695748368', '4.43659695748368'),
+                   ('Solve[x^2==1, x]', '[-1, 1]', '\left [ -1, \quad 1\\right ]'),
+                   ('C(3.7,1.3)', '3923073*2**(3/5)*sqrt(pi)/(62500*gamma(23/10)*gamma(26/5))', '\\frac{3923073 \\cdot 2^{\\frac{3}{5}} \\sqrt{\\pi}}{62500 \\Gamma{\\left(\\frac{23}{10} \\right)} \\Gamma{\\left(\\frac{26}{5} \\right)}}'),
                    ('lcm(n,m)hcf(n,m)', 'm*n', 'm n'),
                    ('integrate(exp(-x**2), x, -infty, infty)', 'sqrt(pi)', '\\sqrt{\\pi}'),
                    ('sqrt(2)', 'sqrt(2)', '\\sqrt{2}'),

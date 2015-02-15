@@ -42,19 +42,19 @@ t_VERT       = r'\|'
 t_DOWN       = r'_'
 
 def t_NUMBER(t):
-    r'([0-9]*\.[0-9]+|[0-9]+)'
+    r"""([0-9]*\.[0-9]+|[0-9]+)"""
     return t
     
 def t_ID(t):
-    r'[a-zA-Z]+'
+    r"""[a-zA-Z]+"""
     return t
 
 def t_ATOM(t):
-    r'\\[a-zA-Z]+'
+    r"""\\[a-zA-Z]+"""
     return t
     
 def t_newline(t):
-    r'\n+'
+    r"""\n+"""
     t.lexer.lineno += len(t.value)
 
 def t_error(t):
@@ -78,11 +78,11 @@ def preprocessImplicitBraces(formula):
             break
         if not tok.value in MEANINGLESS:
             if previous.type in UPDOWNATOM and tok.type == 'ID':
-                output =  output + '{%s}%s ' % (tok.value[0], tok.value[1:])
+                output =  '%s{%s}%s ' % (output, tok.value[0], tok.value[1:])
             elif previous.type in UPDOWNATOM and tok.type in ['NUMBER', 'ATOM']:
-                output =  output + '{%s} ' % tok.value
+                output =  '%s{%s} ' % (output, tok.value)
             else:
-                output = output + '%s ' % tok.value
+                output = '%s%s ' % (output, tok.value)
         previous = tok
     return output
     

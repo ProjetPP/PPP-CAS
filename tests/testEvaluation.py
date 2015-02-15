@@ -1,13 +1,18 @@
 from ppp_cas.evaluator import evaluate
 from unittest import TestCase
-from sympy import latex
 
 class TestEvaluation(TestCase):
 
-    def procedure(self, testCases):
-        for (expr, res) in testCases:
-            string, latex = evaluate(expr)
-            self.assertEqual(latex, res)
+    def procedure(self, testCases, debug=False):
+        for test in testCases:
+            if len(test)==2:
+                (expr, res) = test
+            else:
+                (expr, res, debug) = test
+            if debug:
+                print(expr)
+            strOutput, latexOutput = evaluate(expr, debug)
+            self.assertEqual(latexOutput, res)
 
     def testNumeric(self):
         testCases = [('2/4', '\\frac{1}{2}'),
@@ -80,7 +85,7 @@ class TestEvaluation(TestCase):
                      ('Limit[Sin[x]/x, x->0]', '1'),
                      ('Limit[(1+x/n)^n, n->Infinity]', 'e^{x}'),
                      ('Limit[Sum[1/i, {i, 1, n}]- Log[n], n->Infinity]', '\\gamma'),
-                     ('Solve[x^2==1, x]', '\\left [ \\left ( -1\\right ), \\quad \\left ( 1\\right )\\right ]'),
+                     ('Solve[x^2==1, x]', '\\left [ -1, \\quad 1\\right ]'),
                      ('Expand[(x+1)*(x-1)]', 'x^{2} - 1'),
                      ('Factor[x^2+x]', 'x \\left(x + 1\\right)'),
                      ('Prime[5]', '11'),
@@ -138,8 +143,8 @@ class TestEvaluation(TestCase):
                      ('C(-1,-2)', '\\mathrm{NaN}'),
                      ('C(-2,-1)', '\\mathrm{NaN}'),
                      ('C(-2.5,-1.5)', '0'),
-                     ('C(1.3,3.7)', '0.0284312028601124'),
-                     ('C(3.7,1.3)', '4.43659695748368'),
+                     ('N(C(1.3,3.7))', '0.0284312028601124'),
+                     ('N(C(3.7,1.3))', '4.43659695748368'),
                      ('gcd(6,4)', '2'),
                      ('lcm(n,m)hcf(n,m)', 'm n'),
                      ('Diff(x^4*Cos(y)^z, {x,2}, y, {z,3})', '- 12 x^{2} \\left(z \\log{\\left (\\cos{\\left (y \\right )} \\right )} + 3\\right) \\log^{2}{\\left (\\cos{\\left (y \\right )} \\right )} \\sin{\\left (y \\right )} \\cos^{z - 1}{\\left (y \\right )}'),
@@ -151,8 +156,8 @@ class TestEvaluation(TestCase):
                      ('sum(1/i^6, i, 1, Infty)', '\\frac{\\pi^{6}}{945}'),
                      ('int(1/(x^3 + 1), x)', '\\frac{1}{3} \\log{\\left (x + 1 \\right )} - \\frac{1}{6} \\log{\\left (x^{2} - x + 1 \\right )} + \\frac{\\sqrt{3}}{3} \\operatorname{atan}{\\left (\\frac{\\sqrt{3}}{3} \\left(2 x - 1\\right) \\right )}'),
                      ('Integrate(1/(x^3 + 1), x, 0, 1)', '\\frac{1}{3} \\log{\\left (2 \\right )} + \\frac{\\sqrt{3} \\pi}{9}'),
-                     ('solve(ch(x)=y,x)', '\\left [ \\left ( \\log{\\left (y - \\sqrt{y^{2} - 1} \\right )}\\right ), \\quad \\left ( \\log{\\left (y + \\sqrt{y^{2} - 1} \\right )}\\right )\\right ]'),
-                     ('solve(sinh(x)==y,x)', '\\left \\{ x : \\operatorname{asinh}{\\left (y \\right )}\\right \\}'),
+                     ('solve(ch(x)=y,x)', '\\left [ \\log{\\left (y - \\sqrt{y^{2} - 1} \\right )}, \\quad \\log{\\left (y + \\sqrt{y^{2} - 1} \\right )}\\right ]'),
+                     ('solve(sinh(x)==y,x)', '\\left [ \\log{\\left (y - \\sqrt{y^{2} + 1} \\right )}, \\quad \\log{\\left (y + \\sqrt{y^{2} + 1} \\right )}\\right ]'),
                      ('lim(sin(x)/x, x, 0)', '1'),
                      ('limit(tan(x), x, Pi/2)', '-\\infty'),
                      ('LimitR(tan(x), x, Pi/2)', '-\\infty'),
@@ -181,7 +186,7 @@ class TestEvaluation(TestCase):
                      ("\\frac{42}{1337}", "\\frac{6}{191}"),
                      ("\\sqrt[3]{27}", "3"),
                      ("\\sum_{i=1}^\\infty (1/i^{2})", "\\frac{\\pi^{2}}{6}"),
-                     ("\\sum_{i=1}^\\infty (1/pow(i,2))", "\\frac{\\pi^{2}}{6}"),
+                     ("\\sum_{i=1}^\\infty (1/Pow(i,2))", "\\frac{\\pi^{2}}{6}"),
                      ("\\binom{6}{4}", "15"),
                      ("\\sqrt{x^2}", "\\sqrt{x^{2}}"),
                     ]

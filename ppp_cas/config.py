@@ -1,9 +1,5 @@
 """Configuration module."""
-import os
-import json
-import logging
 from ppp_libmodule.config import Config as BaseConfig
-from ppp_libmodule.exceptions import InvalidConfig
 
 class Config(BaseConfig):
     __slots__ = ('max_heap', 'timeout')

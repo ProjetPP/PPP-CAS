@@ -1,6 +1,6 @@
 from ppp_cas.notation import isMath, traceContainsSpellChecker
 from unittest import TestCase
-from ppp_datamodel.nodes.resource import Resource, MathLatexResource
+from ppp_datamodel.nodes.resource import MathLatexResource
 from ppp_datamodel.nodes.sentence import Sentence
 from ppp_datamodel.communication import TraceItem
 

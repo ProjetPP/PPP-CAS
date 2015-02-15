@@ -75,16 +75,16 @@ t_EQ         = r'='
 t_VERT       = r'\|'
 
 def t_NUMBER(t):
-    r'([0-9]*\.[0-9]+|[0-9]+)'
+    r"""([0-9]*\.[0-9]+|[0-9]+)"""
     return t
 
 def t_ID(t):
-    r'\\?[a-zA-Z]+'
+    r"""\\?[a-zA-Z]+"""
     t.type = reserved.get(t.value,'ID')
     return t
 
 def t_newline(t):
-    r'\n+'
+    r"""\n+"""
     t.lexer.lineno += len(t.value)
 
 t_ignore  = ' \t'

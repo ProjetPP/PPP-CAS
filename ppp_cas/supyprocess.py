@@ -47,13 +47,6 @@ def process(f, *args, **kwargs): # pragma: no cover
     try:
         q = multiprocessing.Queue()
     except OSError:
-        log.error('Using multiprocessing.Queue raised an OSError.\n'
-                'This is probably caused by your system denying semaphore\n'
-                'usage. You should run these two commands:\n'
-                '\tsudo rmdir /dev/shm\n'
-                '\tsudo ln -Tsf /{run,dev}/shm\n'
-                '(See https://github.com/travis-ci/travis-core/issues/187\n'
-                'for more information about this bug.)\n')
         raise
     def newf(f, q, *args, **kwargs):
         if resource:

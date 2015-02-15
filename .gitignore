@@ -6,3 +6,4 @@ build/
 dist/
 parser.out
 parsetab.py
+.idea/

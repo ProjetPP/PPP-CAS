@@ -8,7 +8,9 @@ ANTI_CARACTERISTIC_REGEX = ['sum', 'derivative', 'product', 'limit', 'antideriva
 
 def isMath(formula):
     isCaract = any(e in formula for e in CARACTERISTIC_SYMBOLS)
-    isAnti = any(e+' ' in formula for e in ANTI_CARACTERISTIC_WORDS) or any(e in formula for e in ANTI_CARACTERISTIC_SYMBOLS) or any(re.search(r'%s\s+[^\(]'%e, formula)!=None for e in ANTI_CARACTERISTIC_REGEX)
+    isAnti = any(e+' ' in formula for e in ANTI_CARACTERISTIC_WORDS) \
+             or any(e in formula for e in ANTI_CARACTERISTIC_SYMBOLS) \
+             or any(re.search(r'%s\s+[^\(]'%e, formula) is not None for e in ANTI_CARACTERISTIC_REGEX)
     if isCaract and not isAnti:
         return 2
     if isAnti:

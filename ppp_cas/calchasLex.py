@@ -40,15 +40,15 @@ t_NOT        = r'~'
 
 
 def t_NUMBER(t):
-    r'([0-9]*\.[0-9]+|[0-9]+)'
+    r"""([0-9]*\.[0-9]+|[0-9]+)"""
     return t
     
 def t_ID(t):
-    r'[a-zA-Z_][a-zA-Z0-9_]*'
+    r"""[a-zA-Z_][a-zA-Z0-9_]*"""
     return t
 
 def t_newline(t):
-    r'\n+'
+    r"""\n+"""
     t.lexer.lineno += len(t.value)
 
 t_ignore  = ' \t'

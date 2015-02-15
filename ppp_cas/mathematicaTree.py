@@ -10,28 +10,28 @@ class BinaryOperator:
         return '(%s%s%s)' % (self.left.toCalchas(), op, self.right.toCalchas())
 
 class Plus(BinaryOperator):
-    def toCalchas(self):
+    def toCalchas(self, op='+'):
         return super().toCalchas('+')
 
 class Divide(BinaryOperator):
-    def toCalchas(self):
-        return super().toCalchas('/')
+    def toCalchas(self, op='/'):
+        return super().toCalchas(op)
 
 class Times(BinaryOperator):
-    def toCalchas(self):
-        return super().toCalchas('*')
+    def toCalchas(self, op='*'):
+        return super().toCalchas(op)
 
 class Minus(BinaryOperator):
-    def toCalchas(self):
-        return super().toCalchas('-')
+    def toCalchas(self, op='-'):
+        return super().toCalchas(op)
 
 class Pow(BinaryOperator):
-    def toCalchas(self):
-        return super().toCalchas('**')
+    def toCalchas(self, op='**'):
+        return super().toCalchas(op)
 
 class Arrow(BinaryOperator):
-    def toCalchas(self):
-        return '%s,%s' % (self.left.toCalchas(), self.right.toCalchas())
+    def toCalchas(self, op=','):
+        return '%s%s%s' % (self.left.toCalchas(), op, self.right.toCalchas())
 
 
 class UnaryOperator:

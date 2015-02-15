@@ -2,11 +2,16 @@
 
 from ppp_datamodel import Sentence
 from ppp_datamodel.nodes.resource import MathLatexResource
-from ppp_datamodel.communication import TraceItem, Response, Request
-from ppp_libmodule.exceptions import ClientError
+from ppp_datamodel.communication import TraceItem, Response
 
 from .evaluator import evaluate
 from .notation import relevance, isMath, traceContainsSpellChecker, isInteresting
+#from .supyprocess import process
+from .config import Config
+
+
+def process(f, args, timeout=0, heap_size=0):
+    return f(args)
 
 class RequestHandler:
     def __init__(self, request):
@@ -19,12 +24,12 @@ class RequestHandler:
         if not isinstance(self.tree, Sentence):
             return []
 
-        mathNotation = isMath(self.tree.value) 
+        mathNotation = isMath(self.tree.value)
         if mathNotation == 0 or traceContainsSpellChecker(self.trace):
             return []
 
         try:
-            outputString, outputLatex=evaluate(self.tree.value)
+            outputString, outputLatex = process(evaluate, self.tree.value, timeout=Config().timeout, heap_size=Config().max_heap)
         except (ValueError, SyntaxError):
             return []
 
@@ -33,7 +38,7 @@ class RequestHandler:
 
         outputTree=MathLatexResource(outputString, latex=outputLatex)
         measures = {
-            'accuracy': 1,
+            'accuracy': 1,  # Indeed we hope maths are consistent
             'relevance': relevance(self.tree.value, outputString)
         }
         trace = self.trace + [TraceItem('CAS', outputTree, measures)]

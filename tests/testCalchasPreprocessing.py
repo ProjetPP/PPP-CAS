@@ -1,7 +1,5 @@
-from ppp_cas.calchasYacc import calchasParser
-from ppp_cas.calchasLex import calchasLexer
 from ppp_cas.calchasPreprocessing import preprocessImplicitMultiplication, parseCalchas
-from ppp_cas.calchasTree import FunctionCall, List, Id
+from ppp_cas.calchasTree import FunctionCall, List, Id, Number
 from unittest import TestCase
 
 class TestCalchasPreprocessing(TestCase):
@@ -30,17 +28,17 @@ class TestCalchasPreprocessing(TestCase):
                   ('''f(x)a''', FunctionCall(Id('Mul'),List([FunctionCall(Id('f'),List([Id('x')])), Id('a')]))),
                   ('''g f(n)''', FunctionCall(Id('Mul'),List([Id('g'), FunctionCall(Id('f'),List([Id('n')]))]))),
                   ('''((f(a)(a+b)a))a(c+d)d''', FunctionCall(Id('Mul'),List([FunctionCall(Id('Mul'),List([FunctionCall(Id('Mul'),List([FunctionCall(Id('Mul'),List([FunctionCall(Id('f'),List([Id('a')])), FunctionCall(Id('Add'),List([Id('a'), Id('b')]))])), Id('a')])), FunctionCall(Id('a'),List([FunctionCall(Id('Add'),List([Id('c'), Id('d')]))]))])), Id('d')]))),
-                  ('''a 2''',  FunctionCall(Id('Mul'),List([Id('a'), Id('2')]))),
-                  ('''2 a''',  FunctionCall(Id('Mul'),List([Id('2'), Id('a')]))),
-                  ('''2 4''',  FunctionCall(Id('Mul'),List([Id('2'), Id('4')]))),
-                  ('''2x''',  FunctionCall(Id('Mul'),List([Id('2'), Id('x')]))),
+                  ('''a 2''',  FunctionCall(Id('Mul'),List([Id('a'), Number('2')]))),
+                  ('''2 a''',  FunctionCall(Id('Mul'),List([Number('2'), Id('a')]))),
+                  ('''2 4''',  FunctionCall(Id('Mul'),List([Number('2'), Number('4')]))),
+                  ('''2x''',  FunctionCall(Id('Mul'),List([Number('2'), Id('x')]))),
                   ('''x2''', Id('x2')),
-                  ('''a-b''', FunctionCall(Id('Add'),List([Id('a'), FunctionCall(Id('Mul'),List([Id('b'), Id('-1')]))]))),
-                  ('''a/-b''', FunctionCall(Id('Mul'),List([Id('a'), FunctionCall(Id('Pow'),List([FunctionCall(Id('Mul'),List([Id('-1'), Id('b')])), Id('-1')]))]))),
-                  ('''-a/+b''', FunctionCall(Id('Mul'),List([FunctionCall(Id('Mul'),List([Id('-1'), Id('a')])), FunctionCall(Id('Pow'),List([Id('b'), Id('-1')]))]))),
+                  ('''a-b''', FunctionCall(Id('Add'),List([Id('a'), FunctionCall(Id('Mul'),List([Id('b'), Number('-1')]))]))),
+                  ('''a/-b''', FunctionCall(Id('Mul'),List([Id('a'), FunctionCall(Id('Pow'),List([FunctionCall(Id('Mul'),List([Number('-1'), Id('b')])), Number('-1')]))]))),
+                  ('''-a/+b''', FunctionCall(Id('Mul'),List([FunctionCall(Id('Mul'),List([Number('-1'), Id('a')])), FunctionCall(Id('Pow'),List([Id('b'), Number('-1')]))]))),
                   ('''a(b+c)''', FunctionCall(Id('a'),List([FunctionCall(Id('Add'),List([Id('b'), Id('c')]))]))),
-                  ('''42(b+c)''', FunctionCall(Id('Mul'),List([Id('42'), FunctionCall(Id('Add'),List([Id('b'), Id('c')]))]))),
-                  ('''1/2Pi''', FunctionCall(Id('Mul'),List([FunctionCall(Id('Mul'),List([Id('1'), FunctionCall(Id('Pow'),List([Id('2'), Id('-1')]))])), Id('Pi')]))),
+                  ('''42(b+c)''', FunctionCall(Id('Mul'),List([Number('42'), FunctionCall(Id('Add'),List([Id('b'), Id('c')]))]))),
+                  ('''1/2Pi''', FunctionCall(Id('Mul'),List([FunctionCall(Id('Mul'),List([Number('1'), FunctionCall(Id('Pow'),List([Number('2'), Number('-1')]))])), Id('Pi')]))),
                  ]
         for (expr, res) in testList:
             self.assertEqual(str(parseCalchas(expr)), str(res))

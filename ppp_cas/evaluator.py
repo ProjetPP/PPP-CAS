@@ -1,27 +1,25 @@
 # A lot of this code come from https://github.com/sympy/sympy_gamma/blob/master/app/logic/logic.py
 # http://www.sympygamma.com/
-import sys
-import queue
-import collections
 
 from sympy import latex
 from sympy.parsing.sympy_parser import stringify_expr, eval_expr, standard_transformations
 
 from .parser import Parser
-from .config import Config
-from .supyprocess import process
 
 PREEXEC = """from sympy import *"""
 
-def evaluate(s):
-    result = None
-    parser = Parser(s)
-    inputFormula=parser.normalize()
-    expr, latex = process(eval_input, inputFormula, timeout=Config().timeout, heap_size=Config().max_heap)
+def evaluate(inputFormulaString, debug=False):
+    parser = Parser(inputFormulaString)
+    inputFormulaTree = parser.normalize(debug=debug)
+    if debug:
+        print(inputFormulaTree)
+    if isinstance(inputFormulaTree, str):
+        outputRawString, outputLatex = eval_input(inputFormulaTree)
+    else:
+        outputRawString, outputLatex =  str(inputFormulaTree), latex(inputFormulaTree)
+    return outputRawString, outputLatex
 
-    return expr, latex
-
-def eval_input(s):
+def eval_input(inputTree):
     namespace = {}
     exec(PREEXEC, {}, namespace)
 
@@ -33,7 +31,7 @@ def eval_input(s):
     })
 
     transformations = list(standard_transformations)
-    parsed = stringify_expr(s, {}, namespace, transformations)
+    parsed = stringify_expr(inputTree, {}, namespace, transformations)
     try:
         evaluated = eval_expr(parsed, {}, namespace)
     except SyntaxError:

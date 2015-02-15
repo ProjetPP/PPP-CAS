@@ -27,6 +27,7 @@ setup(
         'ppp_datamodel>=0.5.12',
         'ppp_libmodule>=0.7,<0.8',
         'ply',
+        'sympy',
     ],
     packages=[
         'ppp_cas',

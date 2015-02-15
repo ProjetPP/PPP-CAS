@@ -39,15 +39,15 @@ t_ARROW      = r'->'
 t_EQ         = r'=='
 
 def t_NUMBER(t):
-    r'([0-9]*\.[0-9]+|[0-9]+)'
+    r"""([0-9]*\.[0-9]+|[0-9]+)"""
     return t
     
 def t_ID(t):
-    r'[a-zA-Z][a-zA-Z0-9]*'
+    r"""[a-zA-Z][a-zA-Z0-9]*"""
     return t
 
 def t_newline(t):
-    r'\n+'
+    r"""\n+"""
     t.lexer.lineno += len(t.value)
 
 t_ignore  = ' \t'
