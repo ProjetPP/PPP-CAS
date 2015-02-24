@@ -43,6 +43,7 @@ class TestEvaluation(TestCase):
                      ('floor(Pi)', '3'),
                      ('ceiling(Pi)', '4'),
                      ('(a/(b+1)/c)+1/(d+1)', '\\frac{a \\left(d + 1\\right) + c \\left(b + 1\\right)}{c \\left(b + 1\\right) \\left(d + 1\\right)}'),
+                     ('diff(erf(x),x)','\\frac{2}{\\sqrt{\\pi}} e^{- x^{2}}'),
                     ]
         self.procedure(testCases)
 
@@ -173,6 +174,7 @@ class TestEvaluation(TestCase):
                      ('satisfiable(x & ~y)','\\left \\{ x : \\mathrm{True}, \\quad y : \\mathrm{False}\\right \\}'),
                      ('satisfiable(x & ~x)','\\mathrm{False}'),
                      ('satisfiable(x | ~x)','\\left \\{ x : \\mathrm{False}\\right \\}'),
+                     ('D(erf(x),x)','\\frac{2}{\\sqrt{\\pi}} e^{- x^{2}}'),
                     ]
         self.procedure(testCases)
 

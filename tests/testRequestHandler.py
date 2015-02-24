@@ -49,6 +49,8 @@ class TestRequestHandler(TestCase):
                    'PrimeQ[5]',
                    'Prime[5]',
                    'x & x & x | x & y',
+                   'diff(erf(x),x)',
+                   'D(erf(x),x)',
                   ]
         for expr in testCases:
             handler = RequestHandler(Request(0, 'math', Sentence(expr)))
