@@ -17,6 +17,7 @@ class TestLatex(TestCase):
                   ('''\\lim_{x\\to 0} sin(x)/x''', '''limit(sin (x )/ x , x, 0 )'''),
                   ('''\\sum _ { i = 0 } ^ { \\infty } (1/i^{2}) ''', '''sum((1 / i ^(2 ) ), i, 0 , infty )'''),
                   ('''\\frac { \\log ( \\frac { 1 } { 2 } ) } { 2 ^ {2} } \\log { \\log { n } } ''', '''((log((((1 )/(2 )))))/(2 ^(2 ) ))log(log(n ))'''),
+                  ('''2\\times(1+3)''', '''2 * (1 + 3 )'''),
                   ]
                 
         for (expr, res) in testList:

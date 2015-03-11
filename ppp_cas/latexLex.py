@@ -19,6 +19,7 @@ reserved = {
    '\\tan'        : 'UNARY',
    '\\frac'       : 'BINARY',
    '\\binom'      : 'BINARY',
+   '\\times'      : 'TIMES',
    }
    
 tokens = [

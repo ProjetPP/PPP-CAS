@@ -51,6 +51,7 @@ class TestRequestHandler(TestCase):
                    'x & x & x | x & y',
                    'diff(erf(x),x)',
                    'D(erf(x),x)',
+                   '2\\times(1+3)',
                   ]
         for expr in testCases:
             handler = RequestHandler(Request(0, 'math', Sentence(expr)))

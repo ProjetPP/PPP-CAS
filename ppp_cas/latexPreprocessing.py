@@ -86,7 +86,7 @@ def preprocessImplicitBraces(formula):
         previous = tok
     return output
     
-CARACTERISTIC_SYMBOLS = ['\\sqrt','\\sum','\\prod','\\lim','\\int', '\\frac', '\\\%', '\\binom']
+CARACTERISTIC_SYMBOLS = ['\\']
     
 def isLatex(formula):
     return any(e in formula for e in CARACTERISTIC_SYMBOLS)

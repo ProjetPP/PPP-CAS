@@ -24,7 +24,8 @@ def p_ordinary_symbols(p):
                   | EQ
                   | UP LBRACE expression RBRACE
                   '''
-    translate = { '\\infty' : 'infty'
+    translate = { '\\infty' : 'infty',
+                  '\\times' : '*',
                 }
     if p[1] == '\\%':
         p[0] = '% '
