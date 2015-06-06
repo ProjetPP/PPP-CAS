@@ -86,6 +86,7 @@ class TestEvaluation(TestCase):
                      ('Factor[x^2+x]', 'x \\left(x + 1\\right)'),
                      ('Prime[5]', '11'),
                      ('PrimeQ[5]', '\\mathrm{True}'),
+                     ('N[1- Sum[Binomial[10,k] * 0.2^k *0.8^(10-k), {k, 0, 3}]]', '0.120873881599999'),
                      ]
         self.procedure(testCases)
 

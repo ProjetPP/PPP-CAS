@@ -68,6 +68,7 @@ class TestRequestHandler(TestCase):
                    ('integrate(exp(-x**2), x, -infty, infty)', 'sqrt(pi)', '\\sqrt{\\pi}'),
                    ('sqrt(2)', 'sqrt(2)', '\\sqrt{2}'),
                    ('Integrate[Sin[x*y], {x, 0, 1}, {y, 0, x}]', '-Ci(1)/2 + EulerGamma/2', '- \\frac{1}{2} \\operatorname{Ci}{\\left (1 \\right )} + \\frac{\\gamma}{2}'),
+                   ('N[1- Sum[Binomial[10,k] * 0.2^k *0.8^(10-k), {k, 0, 3}]]', '0.120873881599999', '0.120873881599999'),
                   ]
         for (expr, naturalExpr, latexExpr) in testCases:
             handler = RequestHandler(Request(0, 'math', Sentence(expr)))
