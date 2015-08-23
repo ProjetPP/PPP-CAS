@@ -24,6 +24,7 @@ class TestLatexPreprocessing(TestCase):
                   ('''\\sum\\limits_{j=0}^\\infty''', '''\\sum _ { j = 0 } ^ {\\infty} '''),
                   ('''\\sum_k=0^\\infty''', '''\\sum _ {k} = 0 ^ {\\infty} '''),
                   ('''\\left(\\sum\\limits_{l=0}^\\infty\\right]''', ''' ( \\sum _ { l = 0 } ^ {\\infty} ] '''),
+                  (''' 2*\\left(1+3\\right)''', '''2 * ( 1 + 3 ) '''),
                   ('''\\sqrt{a}''', '''\\sqrt { a } '''),
                   ('''\\sqrt[n]{a}''', '''\\sqrt [ n ] { a } '''),
                   ('''\\sqrt ab''', '''\\sqrt {a}b '''),

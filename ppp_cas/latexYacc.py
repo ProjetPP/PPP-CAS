@@ -24,7 +24,8 @@ def p_ordinary_symbols(p):
                   | EQ
                   | UP LBRACE expression RBRACE
                   """
-    translate = { '\\infty' : 'infty'
+    translate = { '\\infty' : 'infty',
+                  '\\times' : '*',
                 }
     if p[1] == '\\%':
         p[0] = '% '
@@ -33,12 +34,12 @@ def p_ordinary_symbols(p):
     else:
         p[0] = '%s ' % translate.get(p[1], p[1])
     #print("ordinary_symbols : " + p[0])
-                
+
 def p_expression_expr(p):
     """expression_list : expression"""
     p[0] = p[1]
     #print("expression_expr : "+str(p[0]))
-                
+
 def p_expression_list_expr(p):
     """expression_list : expression_list expression"""
     p[0] = p[1] + p[2]
@@ -68,7 +69,7 @@ def p_atom_braces(p):
     """expression : LBRACE expression_list RBRACE"""
     p[0] = p[2]
     #print("atom_braces : "+str(p[0]))
-    
+
 def p_expr_big_op_d(p):
     """p_expr_big_op_d : BIGOP DOWN LBRACE ID EQ expression RBRACE"""
     p[0] = (p[1], p[4], p[6])
@@ -140,7 +141,7 @@ def p_expr_op_unary(p):
     if p[2] in ['{','(']:
         p[0] = '%s(%s)' % (tokenToFunc[p[1]], p[3])
     else:
-        p[0] = '%s(%s)' % (tokenToFunc[p[1]], p[2])  
+        p[0] = '%s(%s)' % (tokenToFunc[p[1]], p[2])
     #print("expr_op_unary : "+str(p[0]))
 
 def p_error(p):
@@ -150,5 +151,5 @@ latexParser = yacc.yacc(debug=0, write_tables=0)
 
 def latexToCalchas(formula):
     return latexParser.parse(preprocessImplicitBraces(formula), lexer=latexLexer)
-    
-    
+
+

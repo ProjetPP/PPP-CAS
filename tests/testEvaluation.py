@@ -91,6 +91,7 @@ class TestEvaluation(TestCase):
                      ('Factor[x^2+x]', 'x \\left(x + 1\\right)'),
                      ('Prime[5]', '11'),
                      ('PrimeQ[5]', '\\mathrm{True}'),
+                     ('N[1- Sum[Binomial[10,k] * 0.2^k *0.8^(10-k), {k, 0, 3}]]', '0.1208738816'),
                      ]
         self.procedure(testCases)
 
@@ -191,6 +192,7 @@ class TestEvaluation(TestCase):
                      ("\\sum_{i=1}^\\infty (1/Pow(i,2))", "\\frac{\\pi^{2}}{6}"),
                      ("\\binom{6}{4}", "15"),
                      ("\\sqrt{x^2}", "\\sqrt{x^{2}}"),
+                     ("2\\times(1+3)", "8"),
                     ]
         self.procedure(testCases)
 
