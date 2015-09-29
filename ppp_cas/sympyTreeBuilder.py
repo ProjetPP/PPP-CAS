@@ -1,5 +1,6 @@
 from .calchasTreeVisitor import CalchasTreeVisitor
 from .calchasTreeVisitor import StdSympyFunction
+from .calchasTree import FunctionCall as CalchasFunctionCall
 from sympy import *
 
 class SympyTreeBuilder(CalchasTreeVisitor):
@@ -20,9 +21,13 @@ class SympyTreeBuilder(CalchasTreeVisitor):
 
     def visitCalchasFunctionCall(self, tree, debug=False):
         function = tree.getFunction()
+        if isinstance(function, CalchasFunctionCall):
+            function = self.visitCalchasTree(function, debug=debug)
+            args = tuple(self.visitCalchasTree(e, debug=debug) for e in tree.getArgs())
+            return function(*args)
         if not function in self.functions.keys():
             if debug:
-                print("New function")
+                print("New function: "+str(function))
             self.functions[function] = StdSympyFunction(symbols(function, cls=Function), len(tree.getArgs()))
         if not (self.functions[function]).isArity(tree.getArity()):
             if debug:
@@ -36,6 +41,8 @@ class SympyTreeBuilder(CalchasTreeVisitor):
         a = f.callFunctionWithUnrearrangedArgs(args, debug=debug)
         if debug:
             print("visitCalchasFunctionCall: ", end="")
+            print(type(a))
+            print("                          ", end="")
             print(a)
         return a
 

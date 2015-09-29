@@ -14,6 +14,9 @@ class AbstractSympyFunction(metaclass=ABCMeta):
     def callFunctionWithUnrearrangedArgs(self, args: tuple, debug:bool = False):
         pass
 
+    def canBeImplicit(self) -> bool:
+        return False
+
 
 class VariadicSympyFunction(AbstractSympyFunction):
     def __init__(self, sympy_function, arg_permutations: dict):
@@ -39,14 +42,21 @@ class VariadicSympyFunction(AbstractSympyFunction):
         return self._sympyFunction(*self.rearrangeArguments(args))
 
 
-class SympyFunction(VariadicSympyFunction):
+class SympyFunction(VariadicSympyFunction, metaclass=ABCMeta):
     def __init__(self, sympy_function, arity: int, arg_permutation: [int]):
         VariadicSympyFunction.__init__(self, sympy_function, {arity: arg_permutation})
 
 
 class StdSympyFunction(SympyFunction):
     def __init__(self, sympy_function, arity: int):
+        self.arity = arity
         SympyFunction.__init__(self, sympy_function, arity, list(range(arity)))
+
+    def canBeImplicit(self) -> bool:
+        return True
+
+    def getArity(self):
+        return self.arity
 
 
 class CompoundFunction(VariadicSympyFunction):
@@ -202,6 +212,7 @@ class CalchasTreeVisitor(metaclass=ABCMeta):
                           "gcd": StdSympyFunction(gcd, 2),
                           "integrate": IntegrateSympyFunction(),
                           "isprime": StdSympyFunction(isprime, 1),
+                          "Lambda": StdSympyFunction(Lambda, 2),
                           "lcm": StdSympyFunction(lcm, 2),
                           "limit": StdSympyFunction(limit, 3),
                           "limitl": CompoundFunction("limitl"),

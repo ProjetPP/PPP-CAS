@@ -181,6 +181,11 @@ class TestEvaluation(TestCase):
                      ('satisfiable(x & ~x)','\\mathrm{False}'),
                      ('satisfiable(x | ~x)','\\left \\{ x : \\mathrm{False}\\right \\}'),
                      ('D(erf(x),x)','\\frac{2}{\\sqrt{\\pi}} e^{- x^{2}}'),
+                     ('D(cos)','\\left( x_{0} \\mapsto - \\sin{\\left (x_{0} \\right )} \\right)'),
+                     ('integrate(cos)','\\left( x_{0} \\mapsto \\sin{\\left (x_{0} \\right )} \\right)'),
+                     ('D(2*cos)','\\left( x_{0} \\mapsto - 2 \\sin{\\left (x_{0} \\right )} \\right)'),
+                     ('D(cos + sin)','\\left( x_{0} \\mapsto - \\sin{\\left (x_{0} \\right )} + \\cos{\\left (x_{0} \\right )} \\right)'),
+                     ('D(D(cos))','\\left( x_{0} \\mapsto - \\cos{\\left (x_{0} \\right )} \\right)'),
                     ]
         self.procedure(testCases)
 

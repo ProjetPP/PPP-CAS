@@ -4,6 +4,8 @@ from .calchasPreprocessing import calchasToSympy, getStdTree
 from .latexPreprocessing import isLatex
 from .latexYacc import latexToCalchas
 from .sympyTreeBuilder import SympyTreeBuilder
+from .calchasTreeLambdafier import CalchasTreeLambdafier
+from .calchasTreeLambdaHoister import CalchasTreeLambdaHoister
 
 
 class Parser:
@@ -27,6 +29,7 @@ class Parser:
                 self.expr = result
 
     def normalize(self, debug=False):
+        #debug=True
         if debug:
             print("init              : ", end="")
             print(self.expr)
@@ -39,7 +42,6 @@ class Parser:
             print("after Mathematica : ", end="")
             print(self.expr)
         #self.fromCalchas()
-        builder = SympyTreeBuilder()
         tree = getStdTree(self.expr)
         if debug:
             print("final > type      : ", end="")
@@ -49,5 +51,22 @@ class Parser:
             print("")
         if tree is None:
             return 'simplify(%s,2)' % self.expr
+        lambdafier = CalchasTreeLambdafier()
+        tree = lambdafier.visitCalchasTree(tree, debug=debug)
+        if debug:
+            print("~diff > type      : ", end="")
+            print(type(tree))
+            print("      > content   : ", end="")
+            print(tree)
+            print("")
+        transformer = CalchasTreeLambdaHoister()
+        tree = transformer.replaceImplicitDiff(tree, debug=debug)
+        if debug:
+            print("~diff > type      : ", end="")
+            print(type(tree))
+            print("      > content   : ", end="")
+            print(tree)
+            print("")
+        builder = SympyTreeBuilder()
         c = builder.toSympyTree(tree, debug=debug)
         return c
