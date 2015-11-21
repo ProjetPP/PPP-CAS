@@ -17,7 +17,7 @@ class SympyTreeBuilder(CalchasTreeVisitor):
     def visitCalchasNumber(self, tree, debug=False):
         if tree.getType() == int:
             return Integer(tree.getNumber())
-        return QQ(tree.getNumber())
+        return Rational(str(tree.getNumber()))
 
     def visitCalchasFunctionCall(self, tree, debug=False):
         function = tree.getFunction()
