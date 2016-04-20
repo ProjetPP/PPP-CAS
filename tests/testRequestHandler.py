@@ -17,14 +17,14 @@ class TestRequestHandler(TestCase):
                    'approx sqrt(2)',
                   ]
         for expr in testCases:
-            handler = RequestHandler(Request(0, 'math', Sentence(expr)))
+            handler = RequestHandler(Request(0, 'math', Sentence(expr), {}, []))
             self.assertEqual(len(handler.answer()), 0)
 
     def testMathUnhandlable(self):
         testCases=['2f(x)b',
                   ]
         for expr in testCases:
-            handler = RequestHandler(Request(0, 'math', Sentence(expr)))
+            handler = RequestHandler(Request(0, 'math', Sentence(expr), {}, []))
             self.assertEqual(len(handler.answer()), 0)
 
     def testError(self):
@@ -54,7 +54,7 @@ class TestRequestHandler(TestCase):
                    '2\\times(1+3)',
                   ]
         for expr in testCases:
-            handler = RequestHandler(Request(0, 'math', Sentence(expr)))
+            handler = RequestHandler(Request(0, 'math', Sentence(expr), {}, []))
             self.assertEqual(len(handler.answer()), 1)
 
     def testTree(self):
@@ -71,7 +71,7 @@ class TestRequestHandler(TestCase):
                    ('N[1- Sum[Binomial[10,k] * 0.2^k *0.8^(10-k), {k, 0, 3}]]', '0.120873881600000', '0.1208738816'),
                   ]
         for (expr, naturalExpr, latexExpr) in testCases:
-            handler = RequestHandler(Request(0, 'math', Sentence(expr)))
+            handler = RequestHandler(Request(0, 'math', Sentence(expr), {}, []))
             self.assertEqual(handler.answer()[0].tree, MathLatexResource(naturalExpr, latex=latexExpr))
 
     def testNoMath(self):
@@ -417,7 +417,7 @@ class TestRequestHandler(TestCase):
                                    ]
 
         for expr in naturalLanguageSentences:
-            handler = RequestHandler(Request(0, 'math', Sentence(expr)))
+            handler = RequestHandler(Request(0, 'math', Sentence(expr), {}, []))
             self.assertEqual(len(handler.answer()), 0)
 
-        self.assertEqual(len(RequestHandler(Request(0, 'math', Resource(''))).answer()), 0)
+        self.assertEqual(len(RequestHandler(Request(0, 'math', Resource(''), {}, [])).answer()), 0)
